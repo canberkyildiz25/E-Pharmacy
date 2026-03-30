@@ -1,0 +1,16 @@
+.overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; z-index: 1000; padding: 16px; }
+.modal { background: white; border-radius: 16px; width: 100%; max-width: 480px; box-shadow: 0 20px 60px rgba(0,0,0,0.2); max-height: 90vh; overflow-y: auto; }
+.header { display: flex; align-items: center; justify-content: space-between; padding: 24px 24px 0; position: sticky; top: 0; background: white; }
+.header h3 { font-size: 18px; font-weight: 700; color: var(--color-dark); }
+.closeBtn { background: none; border: none; font-size: 18px; color: var(--color-text-light); padding: 4px; border-radius: 4px; }
+.form { padding: 20px 24px 24px; display: flex; flex-direction: column; gap: 14px; }
+.field { display: flex; flex-direction: column; gap: 6px; }
+.field label { font-size: 13px; font-weight: 600; color: var(--color-dark); }
+.field input, .field select { padding: 10px 14px; border: 1.5px solid var(--color-border); border-radius: 8px; font-size: 14px; outline: none; transition: border-color 0.2s; }
+.field input:focus, .field select:focus { border-color: var(--color-primary); }
+.error { border-color: #e53e3e !important; }
+.errMsg { font-size: 12px; color: #e53e3e; }
+.btnRow { display: flex; gap: 12px; margin-top: 8px; }
+.cancelBtn { flex: 1; padding: 11px; border: 1.5px solid var(--color-border); background: white; border-radius: 8px; font-size: 14px; font-weight: 600; color: var(--color-text); }
+.submitBtn { flex: 1; padding: 11px; background: var(--color-primary); border: none; color: white; border-radius: 8px; font-size: 14px; font-weight: 700; }
+.submitBtn:hover { background: var(--color-primary-dark); }
