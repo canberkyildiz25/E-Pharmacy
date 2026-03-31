@@ -1,0 +1,34 @@
+.page { padding: 32px 16px; min-height: calc(100vh - 72px); }
+.container { max-width: 900px; margin: 0 auto; }
+.center { display: flex; align-items: center; justify-content: center; min-height: calc(100vh - 72px); color: var(--color-text-light); font-size: 16px; }
+
+.backBtn { background: none; border: none; color: var(--color-primary); font-size: 15px; font-weight: 600; margin-bottom: 24px; padding: 0; transition: opacity 0.2s; }
+.backBtn:hover { opacity: 0.7; }
+
+.card { background: white; border-radius: 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); display: grid; grid-template-columns: 340px 1fr; overflow: hidden; margin-bottom: 32px; }
+
+.imageBox { background: #f5f5f5; display: flex; align-items: center; justify-content: center; min-height: 360px; overflow: hidden; }
+.image { width: 100%; height: 100%; object-fit: cover; }
+.imagePlaceholder { font-size: 96px; }
+
+.info { padding: 36px; display: flex; flex-direction: column; gap: 14px; }
+.badge { display: inline-block; background: #e8f5ec; color: var(--color-primary); padding: 4px 14px; border-radius: 20px; font-size: 13px; font-weight: 600; width: fit-content; }
+.name { font-size: 28px; font-weight: 800; color: var(--color-dark); }
+.price { font-size: 24px; font-weight: 800; color: var(--color-primary); }
+
+.section { border-top: 1px solid var(--color-border); padding-top: 14px; }
+.sectionTitle { font-size: 14px; font-weight: 700; color: var(--color-dark); margin-bottom: 6px; }
+.sectionText { font-size: 14px; color: var(--color-text-light); line-height: 1.7; }
+
+.shopTag { margin-top: 4px; font-size: 13px; color: var(--color-text-light); }
+
+.reviews { background: white; border-radius: 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); padding: 28px 32px; }
+.reviewsTitle { font-size: 20px; font-weight: 800; color: var(--color-dark); margin-bottom: 20px; }
+.reviewList { display: flex; flex-direction: column; gap: 16px; }
+.review { border: 1.5px solid var(--color-border); border-radius: 12px; padding: 16px 20px; }
+.reviewHeader { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
+.reviewUser { font-size: 14px; font-weight: 700; color: var(--color-dark); }
+.reviewRating { font-size: 14px; color: #f6ad55; letter-spacing: 2px; }
+.reviewText { font-size: 14px; color: var(--color-text-light); line-height: 1.6; }
+
+@media (max-width: 768px) { .card { grid-template-columns: 1fr; } .imageBox { min-height: 220px; } .info { padding: 24px; } .reviews { padding: 24px; } }

@@ -7,6 +7,7 @@ import OrdersPage from './pages/OrdersPage/OrdersPage'
 import ProductsPage from './pages/ProductsPage/ProductsPage'
 import SuppliersPage from './pages/SuppliersPage/SuppliersPage'
 import CustomersPage from './pages/CustomersPage/CustomersPage'
+import FranchisesPage from './pages/FranchisesPage/FranchisesPage'
 import PrivateRoute from './components/PrivateRoute/PrivateRoute'
 
 function App() {
@@ -22,6 +23,7 @@ function App() {
           <Route path="products" element={<ProductsPage />} />
           <Route path="suppliers" element={<SuppliersPage />} />
           <Route path="customers" element={<CustomersPage />} />
+          <Route path="franchises" element={<FranchisesPage />} />
         </Route>
         <Route path="*" element={<Navigate to="/login" replace />} />
       </Routes>

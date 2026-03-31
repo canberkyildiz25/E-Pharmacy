@@ -23,13 +23,17 @@ function LoginPage() {
 
   useEffect(() => {
     if (token) navigate('/dashboard')
-    return () => dispatch(clearError())
+    return () => { dispatch(clearError()) }
   }, [token, navigate, dispatch])
 
   const onSubmit = async (data) => {
     const result = await dispatch(login(data))
     if (login.fulfilled.match(result)) {
-      navigate('/dashboard')
+      if (result.payload.role === 'franchise') {
+        window.location.href = `http://localhost:5174/auto-login?token=${result.payload.token}`
+      } else {
+        navigate('/dashboard')
+      }
     }
   }
 

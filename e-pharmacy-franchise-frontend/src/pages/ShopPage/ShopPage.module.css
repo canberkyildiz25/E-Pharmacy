@@ -1,0 +1,60 @@
+.page { padding: 32px 16px; min-height: calc(100vh - 72px); }
+.container { max-width: 1100px; margin: 0 auto; }
+
+.noShop { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: calc(100vh - 72px); gap: 12px; text-align: center; }
+.noShopIcon { font-size: 64px; }
+.noShop h2 { font-size: 24px; font-weight: 800; color: var(--color-dark); }
+.noShop p { color: var(--color-text-light); font-size: 15px; }
+.createBtn { background: var(--color-primary); color: white; border: none; padding: 12px 28px; border-radius: 10px; font-size: 15px; font-weight: 700; margin-top: 8px; transition: background 0.2s; }
+.createBtn:hover { background: var(--color-primary-dark); }
+
+.shopHeader { background: white; border-radius: 16px; padding: 24px 28px; display: flex; align-items: center; justify-content: space-between; gap: 16px; box-shadow: 0 2px 12px rgba(0,0,0,0.06); margin-bottom: 24px; }
+.shopInfo { display: flex; align-items: center; gap: 16px; }
+.shopLogo { width: 60px; height: 60px; border-radius: 12px; object-fit: cover; border: 2px solid var(--color-border); }
+.shopName { font-size: 22px; font-weight: 800; color: var(--color-dark); margin-bottom: 4px; }
+.shopMeta { font-size: 13px; color: var(--color-text-light); }
+.shopActions { display: flex; gap: 12px; }
+.editBtn { background: white; border: 1.5px solid var(--color-border); color: var(--color-dark); padding: 10px 20px; border-radius: 8px; font-size: 14px; font-weight: 600; transition: all 0.2s; }
+.editBtn:hover { border-color: var(--color-primary); color: var(--color-primary); }
+.addBtn { background: var(--color-primary); color: white; border: none; padding: 10px 20px; border-radius: 8px; font-size: 14px; font-weight: 600; transition: background 0.2s; }
+.addBtn:hover { background: var(--color-primary-dark); }
+
+.tabs { display: flex; gap: 4px; background: white; border-radius: 12px; padding: 6px; width: fit-content; margin-bottom: 24px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+.tab { padding: 8px 24px; border-radius: 8px; border: none; background: transparent; font-size: 14px; font-weight: 600; color: var(--color-text-light); transition: all 0.2s; }
+.activeTab { background: var(--color-primary); color: white; }
+
+.filterBar { display: flex; gap: 12px; margin-bottom: 24px; flex-wrap: wrap; }
+.select { padding: 10px 14px; border-radius: 8px; border: 1.5px solid var(--color-border); font-size: 14px; background: white; outline: none; min-width: 180px; }
+.select:focus { border-color: var(--color-primary); }
+.searchInput { padding: 10px 14px; border-radius: 8px; border: 1.5px solid var(--color-border); font-size: 14px; outline: none; flex: 1; min-width: 180px; }
+.searchInput:focus { border-color: var(--color-primary); }
+.filterBtn { background: var(--color-primary); color: white; border: none; padding: 10px 24px; border-radius: 8px; font-size: 14px; font-weight: 600; transition: background 0.2s; }
+.filterBtn:hover { background: var(--color-primary-dark); }
+
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 20px; }
+.loading, .empty { color: var(--color-text-light); font-size: 15px; padding: 32px; text-align: center; grid-column: 1/-1; }
+
+.card { background: white; border-radius: 14px; overflow: hidden; box-shadow: 0 2px 10px rgba(0,0,0,0.06); transition: transform 0.2s, box-shadow 0.2s; }
+.card:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,0.1); }
+.cardImg { height: 160px; background: #f5f5f5; display: flex; align-items: center; justify-content: center; overflow: hidden; font-size: 48px; }
+.cardImg img { width: 100%; height: 100%; object-fit: cover; }
+.cardBody { padding: 16px; }
+.medName { font-size: 15px; font-weight: 700; color: var(--color-dark); margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.medPrice { font-size: 16px; font-weight: 800; color: var(--color-primary); margin-bottom: 12px; }
+.cardActions { display: flex; gap: 8px; }
+.cardEditBtn { flex: 1; padding: 8px; border-radius: 8px; border: 1.5px solid var(--color-border); background: white; color: var(--color-dark); font-size: 13px; font-weight: 600; transition: all 0.2s; }
+.cardEditBtn:hover { border-color: var(--color-primary); color: var(--color-primary); }
+.cardDeleteBtn { flex: 1; padding: 8px; border-radius: 8px; border: 1.5px solid #fc8181; background: white; color: #e53e3e; font-size: 13px; font-weight: 600; transition: all 0.2s; }
+.cardDeleteBtn:hover { background: #fff5f5; }
+.addToShopBtn { flex: 1; padding: 8px; border-radius: 8px; border: none; background: var(--color-primary); color: white; font-size: 13px; font-weight: 600; transition: background 0.2s; }
+.addToShopBtn:hover { background: var(--color-primary-dark); }
+.detailsBtn { flex: 1; padding: 8px; border-radius: 8px; border: 1.5px solid var(--color-border); background: white; color: var(--color-dark); font-size: 13px; font-weight: 600; transition: all 0.2s; }
+.detailsBtn:hover { border-color: var(--color-primary); color: var(--color-primary); }
+
+.pagination { display: flex; gap: 8px; justify-content: center; margin-top: 32px; }
+.pageBtn { padding: 8px 14px; border-radius: 8px; border: 1.5px solid var(--color-border); background: white; font-size: 14px; font-weight: 600; color: var(--color-dark); transition: all 0.2s; }
+.pageBtn:hover:not(:disabled) { border-color: var(--color-primary); color: var(--color-primary); }
+.pageBtn:disabled { opacity: 0.4; cursor: not-allowed; }
+.activePage { background: var(--color-primary); color: white; border-color: var(--color-primary); }
+
+@media (max-width: 768px) { .shopHeader { flex-direction: column; align-items: flex-start; } .shopActions { width: 100%; } .addBtn, .editBtn { flex: 1; text-align: center; } }
