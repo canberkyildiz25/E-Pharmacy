@@ -1,0 +1,12 @@
+.overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; z-index: 1000; padding: 16px; }
+.modal { background: white; border-radius: 20px; padding: 40px 32px; max-width: 380px; width: 100%; text-align: center; box-shadow: 0 20px 60px rgba(0,0,0,0.2); position: relative; }
+.closeBtn { position: absolute; top: 16px; right: 16px; background: none; border: none; font-size: 18px; color: var(--color-text-light); }
+.closeBtn:hover { color: var(--color-dark); }
+.icon { font-size: 48px; display: block; margin-bottom: 16px; }
+.title { font-size: 22px; font-weight: 800; color: var(--color-dark); margin-bottom: 10px; }
+.text { font-size: 14px; color: var(--color-text-light); line-height: 1.6; margin-bottom: 28px; }
+.actions { display: flex; gap: 12px; justify-content: center; }
+.loginBtn { flex: 1; padding: 12px; border-radius: 10px; background: var(--color-primary); color: white; font-weight: 700; font-size: 15px; text-align: center; }
+.loginBtn:hover { background: var(--color-primary-dark); }
+.registerBtn { flex: 1; padding: 12px; border-radius: 10px; border: 1.5px solid var(--color-border); color: var(--color-dark); font-weight: 600; font-size: 15px; text-align: center; }
+.registerBtn:hover { border-color: var(--color-primary); color: var(--color-primary); }
