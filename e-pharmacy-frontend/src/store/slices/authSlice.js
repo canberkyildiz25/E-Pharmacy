@@ -3,8 +3,10 @@ import api from '../../services/api'
 
 export const login = createAsyncThunk('auth/login', async (credentials, { rejectWithValue }) => {
   try {
-    const { data } = await api.post('/user/login', credentials)
-    localStorage.setItem('token', data.token)
+    const { data } = await api.post('/user/unified-login', credentials)
+    if (data.role === 'admin') {
+      localStorage.setItem('token', data.token)
+    }
     return data
   } catch (err) {
     return rejectWithValue(err.response?.data?.message || 'Login failed')
@@ -34,6 +36,7 @@ const authSlice = createSlice({
   initialState: {
     user: null,
     token: localStorage.getItem('token'),
+    role: null,
     loading: false,
     error: null,
   },
@@ -45,8 +48,11 @@ const authSlice = createSlice({
       .addCase(login.pending, (state) => { state.loading = true; state.error = null })
       .addCase(login.fulfilled, (state, action) => {
         state.loading = false
-        state.token = action.payload.token
-        state.user = action.payload.user
+        state.role = action.payload.role
+        if (action.payload.role === 'admin') {
+          state.token = action.payload.token
+          state.user = action.payload.user
+        }
       })
       .addCase(login.rejected, (state, action) => {
         state.loading = false

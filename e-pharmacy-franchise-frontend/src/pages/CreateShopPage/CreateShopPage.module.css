@@ -1,0 +1,27 @@
+.page { padding: 40px 16px; min-height: calc(100vh - 72px); }
+.container { max-width: 800px; margin: 0 auto; background: white; border-radius: 20px; padding: 40px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); }
+.header { margin-bottom: 32px; }
+.title { font-size: 28px; font-weight: 800; color: var(--color-dark); margin-bottom: 8px; }
+.subtitle { color: var(--color-text-light); font-size: 15px; }
+.logoSection { display: flex; align-items: center; gap: 16px; margin-bottom: 28px; }
+.logoPreview { width: 80px; height: 80px; border-radius: 12px; border: 2px dashed var(--color-border); display: flex; align-items: center; justify-content: center; overflow: hidden; }
+.logoImg { width: 100%; height: 100%; object-fit: cover; }
+.logoPlaceholder { font-size: 32px; }
+.uploadBtn { background: var(--color-primary); color: white; padding: 10px 20px; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; transition: background 0.2s; }
+.uploadBtn:hover { background: var(--color-primary-dark); }
+.grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 24px; }
+.field { display: flex; flex-direction: column; gap: 6px; }
+.field label { font-size: 13px; font-weight: 600; color: var(--color-dark); }
+.input, .inputError { padding: 11px 14px; border-radius: 8px; font-size: 14px; outline: none; transition: border-color 0.2s; width: 100%; }
+.input { border: 1.5px solid var(--color-border); }
+.input:focus { border-color: var(--color-primary); }
+.inputError { border: 1.5px solid #e53e3e; }
+.err { font-size: 12px; color: #e53e3e; }
+.deliveryField { margin-bottom: 28px; }
+.deliveryLabel { font-size: 13px; font-weight: 600; color: var(--color-dark); display: block; margin-bottom: 10px; }
+.radioGroup { display: flex; gap: 20px; }
+.radioLabel { display: flex; align-items: center; gap: 8px; font-size: 14px; cursor: pointer; }
+.btn { background: var(--color-primary); color: white; border: none; padding: 14px 40px; border-radius: 10px; font-size: 16px; font-weight: 700; transition: all 0.2s; }
+.btn:hover:not(:disabled) { background: var(--color-primary-dark); }
+.btn:disabled { opacity: 0.7; cursor: not-allowed; }
+@media (max-width: 768px) { .grid { grid-template-columns: 1fr; } .container { padding: 24px; } }

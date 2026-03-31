@@ -1,0 +1,55 @@
+.page { padding: 32px 16px; min-height: calc(100vh - 72px); }
+.container { max-width: 1100px; margin: 0 auto; }
+.center { display: flex; align-items: center; justify-content: center; min-height: calc(100vh - 72px); color: var(--color-text-light); font-size: 16px; }
+.pageTitle { font-size: 28px; font-weight: 800; color: var(--color-dark); margin-bottom: 28px; }
+
+.statGrid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 16px; margin-bottom: 28px; }
+.statCard { background: white; border-radius: 16px; padding: 20px 24px; display: flex; align-items: center; gap: 16px; box-shadow: 0 2px 12px rgba(0,0,0,0.06); }
+.incomeCard { border-left: 4px solid var(--color-primary); }
+.expenseCard { border-left: 4px solid #fc8181; }
+.statIcon { font-size: 32px; flex-shrink: 0; }
+.statLabel { font-size: 13px; color: var(--color-text-light); margin-bottom: 4px; }
+.statValue { font-size: 24px; font-weight: 800; color: var(--color-dark); }
+
+.bottomGrid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+.panel { background: white; border-radius: 16px; padding: 24px; box-shadow: 0 2px 12px rgba(0,0,0,0.06); }
+.panelTitle { font-size: 18px; font-weight: 800; color: var(--color-dark); margin-bottom: 20px; }
+.empty { color: var(--color-text-light); font-size: 14px; padding: 16px 0; text-align: center; }
+
+/* Customers */
+.customerList { display: flex; flex-direction: column; }
+.customerRow { display: flex; align-items: center; gap: 12px; padding: 12px; border-radius: 10px; cursor: pointer; transition: background 0.15s; }
+.customerRow:hover, .activeRow { background: #f5fdf8; }
+.customerAvatar { width: 40px; height: 40px; border-radius: 50%; background: var(--color-primary); color: white; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 16px; overflow: hidden; flex-shrink: 0; }
+.customerAvatar img { width: 100%; height: 100%; object-fit: cover; }
+.customerInfo { flex: 1; min-width: 0; }
+.customerName { font-size: 14px; font-weight: 600; color: var(--color-dark); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.customerEmail { font-size: 12px; color: var(--color-text-light); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.customerSpent { font-size: 14px; font-weight: 700; color: var(--color-primary); flex-shrink: 0; }
+
+.goodsPanel { background: #f9f9f9; border-radius: 10px; margin: 0 12px 8px; padding: 12px; }
+.goodsTitle { font-size: 13px; font-weight: 700; color: var(--color-dark); margin-bottom: 10px; }
+.goodsRow { display: flex; align-items: center; gap: 10px; padding: 6px 0; border-bottom: 1px solid var(--color-border); }
+.goodsRow:last-child { border-bottom: none; }
+.goodsImg { width: 36px; height: 36px; border-radius: 8px; object-fit: cover; }
+.goodsName { font-size: 13px; font-weight: 600; color: var(--color-dark); }
+.goodsPrice { font-size: 12px; color: var(--color-primary); font-weight: 600; }
+
+/* Transactions */
+.txList { display: flex; flex-direction: column; gap: 4px; }
+.txRow { display: flex; align-items: center; gap: 12px; padding: 10px 12px; border-radius: 10px; transition: background 0.15s; }
+.txRow:hover { background: #f9f9f9; }
+.txDot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; background: #ccc; }
+.txDot[data-type="Income"] { background: var(--color-primary); }
+.txDot[data-type="Expense"] { background: #fc8181; }
+.txDot[data-type="Error"] { background: #f6ad55; }
+.txInfo { flex: 1; min-width: 0; }
+.txName { font-size: 14px; font-weight: 600; color: var(--color-dark); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.txType { font-size: 12px; color: var(--color-text-light); }
+.txAmount { font-size: 15px; font-weight: 700; flex-shrink: 0; }
+.income { color: var(--color-primary); }
+.expense { color: #e53e3e; }
+.error { color: #f6ad55; }
+
+@media (max-width: 768px) { .bottomGrid { grid-template-columns: 1fr; } .statGrid { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 480px) { .statGrid { grid-template-columns: 1fr; } }

@@ -11,6 +11,7 @@ const ordersRoutes = require('./routes/orders');
 const productsRoutes = require('./routes/products');
 const suppliersRoutes = require('./routes/suppliers');
 const customersRoutes = require('./routes/customers');
+const franchisesRoutes = require('./routes/franchises');
 
 const app = express();
 
@@ -31,6 +32,7 @@ app.use('/api/orders', ordersRoutes);
 app.use('/api/products', productsRoutes);
 app.use('/api/suppliers', suppliersRoutes);
 app.use('/api/customers', customersRoutes);
+app.use('/api/franchises', franchisesRoutes);
 
 // 404 handler
 app.use((req, res) => {

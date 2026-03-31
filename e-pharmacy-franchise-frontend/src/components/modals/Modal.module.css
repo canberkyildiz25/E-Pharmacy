@@ -1,0 +1,39 @@
+.overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.45); display: flex; align-items: center; justify-content: center; z-index: 1000; padding: 16px; }
+
+.modal { background: white; border-radius: 20px; width: 100%; max-width: 540px; max-height: 90vh; overflow-y: auto; box-shadow: 0 20px 60px rgba(0,0,0,0.2); }
+.modalSmall { background: white; border-radius: 20px; width: 100%; max-width: 400px; box-shadow: 0 20px 60px rgba(0,0,0,0.2); }
+
+.header { display: flex; align-items: center; justify-content: space-between; padding: 24px 24px 0; }
+.title { font-size: 20px; font-weight: 800; color: var(--color-dark); }
+.closeBtn { background: none; border: none; font-size: 18px; color: var(--color-text-light); line-height: 1; padding: 4px; transition: color 0.2s; }
+.closeBtn:hover { color: var(--color-dark); }
+
+.form { padding: 20px 24px 24px; display: flex; flex-direction: column; gap: 16px; }
+
+.photoSection { display: flex; align-items: center; gap: 16px; }
+.photoPreview { width: 72px; height: 72px; border-radius: 12px; border: 2px dashed var(--color-border); display: flex; align-items: center; justify-content: center; overflow: hidden; font-size: 28px; flex-shrink: 0; }
+.photoPreview img { width: 100%; height: 100%; object-fit: cover; }
+.uploadBtn { background: var(--color-primary); color: white; padding: 8px 18px; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; transition: background 0.2s; }
+.uploadBtn:hover { background: var(--color-primary-dark); }
+
+.row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.field { display: flex; flex-direction: column; gap: 5px; }
+.field label { font-size: 13px; font-weight: 600; color: var(--color-dark); }
+.input { padding: 10px 12px; border-radius: 8px; border: 1.5px solid var(--color-border); font-size: 14px; outline: none; resize: vertical; transition: border-color 0.2s; width: 100%; }
+.input:focus { border-color: var(--color-primary); }
+.inputError { padding: 10px 12px; border-radius: 8px; border: 1.5px solid #e53e3e; font-size: 14px; outline: none; resize: vertical; width: 100%; }
+.err { font-size: 12px; color: #e53e3e; }
+
+.actions { display: flex; gap: 12px; justify-content: flex-end; padding-top: 4px; }
+.cancelBtn { background: white; border: 1.5px solid var(--color-border); color: var(--color-dark); padding: 10px 24px; border-radius: 8px; font-size: 14px; font-weight: 600; transition: all 0.2s; }
+.cancelBtn:hover { border-color: var(--color-primary); color: var(--color-primary); }
+.submitBtn { background: var(--color-primary); color: white; border: none; padding: 10px 24px; border-radius: 8px; font-size: 14px; font-weight: 700; transition: background 0.2s; }
+.submitBtn:hover { background: var(--color-primary-dark); }
+.deleteBtn { background: #e53e3e; color: white; border: none; padding: 10px 24px; border-radius: 8px; font-size: 14px; font-weight: 700; transition: background 0.2s; }
+.deleteBtn:hover { background: #c53030; }
+
+.deleteBody { padding: 24px; display: flex; flex-direction: column; align-items: center; gap: 12px; text-align: center; }
+.deleteIcon { font-size: 48px; }
+.deleteText { font-size: 15px; color: var(--color-text); line-height: 1.6; }
+
+.actions:last-child { padding: 0 24px 24px; }
