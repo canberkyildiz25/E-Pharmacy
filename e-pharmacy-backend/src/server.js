@@ -20,6 +20,7 @@ const franchisesRoutes  = require('./routes/admin/franchises');
 // Franchise
 const shopRoutes        = require('./routes/franchise/shop');
 const statisticsRoutes  = require('./routes/franchise/statistics');
+const franchiseOrdersRoutes = require('./routes/franchise/orders');
 // Client (public + auth)
 const medicinesRoutes   = require('./routes/client/medicines');
 const storesRoutes      = require('./routes/client/stores');
@@ -31,12 +32,7 @@ const app = express();
 app.use(helmet({ crossOriginResourcePolicy: false }));
 app.use(morgan('dev'));
 app.use(cors({
-  origin: [
-    'http://localhost:5173', // admin frontend
-    'http://localhost:5174', // franchise frontend
-    'http://localhost:5175', // client frontend
-    'http://localhost:3000',
-  ],
+  origin: ['http://localhost:5173', 'http://localhost:3000'],
   credentials: true,
 }));
 app.use(express.json());
@@ -55,8 +51,9 @@ app.use('/api/customers',   auth, requireRole('admin'), customersRoutes);
 app.use('/api/franchises',  auth, requireRole('admin'), franchisesRoutes);
 
 // ── FRANCHISE (sadece franchise rolü) ──────────────
-app.use('/api/statistics',  auth, requireRole('franchise'), statisticsRoutes);
-app.use('/api/shop',        auth, requireRole('franchise'), shopRoutes);
+app.use('/api/statistics',      auth, requireRole('franchise'), statisticsRoutes);
+app.use('/api/shop',            auth, requireRole('franchise'), shopRoutes);
+app.use('/api/franchise/orders', auth, requireRole('franchise'), franchiseOrdersRoutes);
 
 // ── CLIENT (herkese açık veya client auth) ─────────
 app.use('/api/medicines',        medicinesRoutes);   // public

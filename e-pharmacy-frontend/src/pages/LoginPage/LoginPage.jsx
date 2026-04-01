@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
@@ -14,18 +14,26 @@ const schema = yup.object({
   password: yup.string().min(6, 'Şifre en az 6 karakter olmalıdır').required('Şifre zorunludur'),
 })
 
+const ROLES = [
+  { key: 'client',    label: 'Müşteri Girişi',  icon: '👤', desc: 'İlaç sipariş etmek için giriş yapın' },
+  { key: 'franchise', label: 'Eczane Girişi',   icon: '🏪', desc: 'Eczanenizi yönetmek için giriş yapın' },
+  { key: 'admin',     label: 'Admin Girişi',    icon: '⚙️', desc: 'Sistem yönetimi için giriş yapın' },
+]
+
 function LoginPage() {
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const { loading, error, token, user } = useSelector((state) => state.auth)
   const { register, handleSubmit, formState: { errors } } = useForm({ resolver: yupResolver(schema) })
+  const [roleTab, setRoleTab] = useState('client')
 
-  // Zaten giriş yapılmışsa role'e göre yönlendir
+  const activeRole = ROLES.find(r => r.key === roleTab)
+
   useEffect(() => {
     if (token && user) {
-      if (user.role === 'admin')     navigate('/admin/dashboard', { replace: true })
+      if (user.role === 'admin')          navigate('/admin/dashboard', { replace: true })
       else if (user.role === 'franchise') navigate('/franchise/shop', { replace: true })
-      else navigate('/home', { replace: true })
+      else                                navigate('/home', { replace: true })
     }
     return () => { dispatch(clearError()) }
   }, [token, user, navigate, dispatch])
@@ -56,10 +64,33 @@ function LoginPage() {
           </div>
         </div>
       </div>
+
       <div className={styles.formSide}>
         <div className={styles.formCard}>
-          <h2 className={styles.title}>Giriş Yap</h2>
-          <p className={styles.subtitle}>Hesabınıza giriş yapın</p>
+
+          {/* Rol Sekmeleri */}
+          <div className={styles.roleTabs}>
+            {ROLES.map(r => (
+              <button
+                key={r.key}
+                type="button"
+                className={`${styles.roleTab} ${roleTab === r.key ? styles.roleTabActive : ''}`}
+                onClick={() => setRoleTab(r.key)}
+              >
+                <span>{r.icon}</span>
+                <span>{r.label.split(' ')[0]}</span>
+              </button>
+            ))}
+          </div>
+
+          <div className={styles.roleInfo}>
+            <span className={styles.roleInfoIcon}>{activeRole.icon}</span>
+            <div>
+              <p className={styles.roleInfoTitle}>{activeRole.label}</p>
+              <p className={styles.roleInfoDesc}>{activeRole.desc}</p>
+            </div>
+          </div>
+
           <form onSubmit={handleSubmit(onSubmit)} className={styles.form} noValidate>
             <div className={styles.field}>
               <label className={styles.label}>E-posta Adresi</label>
@@ -72,9 +103,14 @@ function LoginPage() {
               {errors.password && <span className={styles.err}>{errors.password.message}</span>}
             </div>
             {error && <div className={styles.serverError}>{error}</div>}
-            <button type="submit" className={styles.btn} disabled={loading}>{loading ? 'Giriş yapılıyor...' : 'Giriş Yap'}</button>
-            <p className={styles.switchText}>Hesabınız yok mu? <Link to="/register" className={styles.switchLink}>Kayıt Ol</Link></p>
+            <button type="submit" className={styles.btn} disabled={loading}>
+              {loading ? 'Giriş yapılıyor...' : 'Giriş Yap'}
+            </button>
+            <p className={styles.switchText}>
+              Hesabınız yok mu? <Link to="/register" className={styles.switchLink}>Kayıt Ol</Link>
+            </p>
           </form>
+
         </div>
       </div>
     </div>

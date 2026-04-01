@@ -2,6 +2,25 @@ const router = require('express').Router();
 const upload = require('../../middleware/upload');
 const Shop = require('../../models/Shop');
 const Medicine = require('../../models/Medicine');
+const https = require('https');
+
+async function geocode(streetAddress, city, zipCode) {
+  const q = encodeURIComponent(`${streetAddress}, ${zipCode} ${city}, Turkey`);
+  const url = `https://nominatim.openstreetmap.org/search?q=${q}&format=json&limit=1`;
+  return new Promise((resolve) => {
+    https.get(url, { headers: { 'User-Agent': 'EPharmacyApp/1.0' } }, (res) => {
+      let data = '';
+      res.on('data', chunk => data += chunk);
+      res.on('end', () => {
+        try {
+          const results = JSON.parse(data);
+          if (results.length > 0) resolve({ lat: parseFloat(results[0].lat), lng: parseFloat(results[0].lon) });
+          else resolve({ lat: null, lng: null });
+        } catch { resolve({ lat: null, lng: null }); }
+      });
+    }).on('error', () => resolve({ lat: null, lng: null }));
+  });
+}
 
 const CATEGORIES = ['Medicine','Head','Hand','Dental Care','Skin Care','Eye Care','Vitamins & Supplements','Orthopedic Products','Baby Care'];
 
@@ -21,10 +40,12 @@ router.post('/create', upload.single('logo'), async (req, res) => {
       return res.status(400).json({ message: 'Zaten bir mağazanız var' });
     }
     const { shopName, ownerName, email, phone, streetAddress, city, zipCode, hasOwnDelivery } = req.body;
+    const { lat, lng } = await geocode(streetAddress, city, zipCode);
     const shop = await Shop.create({
       owner: req.user._id, shopName, ownerName, email, phone, streetAddress, city, zipCode,
       hasOwnDelivery: hasOwnDelivery === 'true' || hasOwnDelivery === true,
       logo: req.file ? `/uploads/${req.file.filename}` : '',
+      lat, lng,
     });
     res.status(201).json(shop);
   } catch (err) {
@@ -52,6 +73,15 @@ router.put('/:shopId/update', upload.single('logo'), async (req, res) => {
     const updates = { ...req.body };
     if (updates.hasOwnDelivery !== undefined) updates.hasOwnDelivery = updates.hasOwnDelivery === 'true';
     if (req.file) updates.logo = `/uploads/${req.file.filename}`;
+    if (updates.streetAddress || updates.city || updates.zipCode) {
+      const current = shop;
+      const addr = updates.streetAddress || current.streetAddress;
+      const city = updates.city || current.city;
+      const zip = updates.zipCode || current.zipCode;
+      const coords = await geocode(addr, city, zip);
+      updates.lat = coords.lat;
+      updates.lng = coords.lng;
+    }
     res.json(await Shop.findByIdAndUpdate(req.params.shopId, updates, { new: true }));
   } catch (err) {
     res.status(400).json({ message: err.message });

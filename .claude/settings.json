@@ -1,0 +1,14 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm init:*)",
+      "Bash(npm create:*)",
+      "Bash(node src/seed.js)",
+      "Bash(node seed-admin.js)",
+      "Bash(gh auth:*)",
+      "Bash(node geocode-existing.js)",
+      "Bash(node geocode-fallback.js)",
+      "Bash(node -e ':*)"
+    ]
+  }
+}

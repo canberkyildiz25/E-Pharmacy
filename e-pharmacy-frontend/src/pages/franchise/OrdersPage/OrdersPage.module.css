@@ -1,0 +1,56 @@
+.page { min-height: 100vh; background: #f8faf8; padding: 40px 0; }
+.container { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
+.loading { text-align: center; padding: 80px; color: #888; font-size: 16px; }
+
+.pageHeader { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 28px; }
+.pageTitle { font-size: 26px; font-weight: 900; color: #1D1E2C; margin-bottom: 4px; }
+.pageSub { font-size: 14px; color: #888; }
+.totalBadge { background: #1D1E2C; color: white; padding: 8px 18px; border-radius: 20px; font-size: 14px; font-weight: 700; }
+
+.statRow { display: grid; grid-template-columns: repeat(6, 1fr); gap: 12px; margin-bottom: 28px; }
+.statCard { border-radius: 14px; padding: 16px 12px; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 4px; border: 1.5px solid transparent; }
+.statIcon { font-size: 22px; }
+.statCount { font-size: 24px; font-weight: 900; }
+.statLabel { font-size: 11px; font-weight: 600; }
+
+.filterTabs { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 24px; }
+.filterTab { padding: 8px 16px; border-radius: 20px; border: 1.5px solid #e0e0e0; background: white; font-size: 13px; font-weight: 600; color: #555; cursor: pointer; transition: all 0.15s; display: flex; align-items: center; gap: 6px; }
+.filterTab:hover { border-color: #3BCC70; color: #3BCC70; }
+.filterTabActive { background: #1D1E2C; color: white; border-color: #1D1E2C; }
+.tabCount { background: #3BCC70; color: white; font-size: 11px; padding: 1px 7px; border-radius: 10px; }
+
+.empty { text-align: center; padding: 60px; color: #aaa; }
+.emptyIcon { font-size: 48px; display: block; margin-bottom: 12px; }
+
+.orderList { display: flex; flex-direction: column; gap: 12px; }
+.orderCard { background: white; border-radius: 16px; border: 1.5px solid #e8f0e8; overflow: hidden; }
+.orderTop { display: flex; align-items: center; justify-content: space-between; padding: 18px 20px; cursor: pointer; transition: background 0.15s; }
+.orderTop:hover { background: #fafcfa; }
+.orderLeft { display: flex; align-items: center; gap: 14px; }
+.orderIcon { font-size: 28px; }
+.orderCustomer { font-size: 15px; font-weight: 700; color: #1D1E2C; margin-bottom: 3px; }
+.orderMeta { font-size: 13px; color: #888; }
+.orderRight { display: flex; align-items: center; gap: 12px; }
+.statusBadge { font-size: 12px; font-weight: 700; padding: 5px 12px; border-radius: 20px; }
+.chevron { font-size: 11px; color: #bbb; }
+
+.orderDetail { border-top: 1.5px solid #f0f0f0; padding: 20px; background: #fafcfa; }
+.detailGrid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 20px; }
+.detailSection {}
+.detailLabel { font-size: 12px; font-weight: 800; color: #aaa; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 10px; }
+.detailVal { font-size: 14px; color: #444; margin-bottom: 5px; }
+.orderItem { display: flex; align-items: center; gap: 8px; padding: 6px 0; border-bottom: 1px solid #f0f0f0; font-size: 14px; }
+.orderItemName { flex: 1; color: #333; }
+.orderItemQty { color: #888; font-size: 13px; }
+.orderItemPrice { font-weight: 700; color: #1D1E2C; min-width: 70px; text-align: right; }
+.orderTotal { margin-top: 10px; font-size: 15px; color: #555; text-align: right; }
+.orderTotal strong { color: #3BCC70; font-size: 17px; }
+
+.statusActions { }
+.statusBtns { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px; }
+.statusBtn { padding: 7px 14px; border-radius: 8px; border: 1.5px solid #e0e0e0; background: white; font-size: 13px; font-weight: 600; color: #555; cursor: pointer; transition: all 0.15s; }
+.statusBtn:hover { border-color: #3BCC70; color: #3BCC70; }
+.statusBtnActive { font-weight: 800; }
+
+@media (max-width: 900px) { .statRow { grid-template-columns: repeat(3, 1fr); } .detailGrid { grid-template-columns: 1fr; } }
+@media (max-width: 600px) { .statRow { grid-template-columns: repeat(2, 1fr); } .filterTabs { gap: 6px; } }

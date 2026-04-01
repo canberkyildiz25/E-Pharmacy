@@ -37,6 +37,8 @@ function MedicinePage() {
   const [searchCategory, setSearchCategory] = useState('')
   const [page, setPage] = useState(1)
   const [authModal, setAuthModal] = useState(false)
+  const [lastAdded, setLastAdded] = useState(null)
+  const { items } = useSelector((state) => state.cart)
 
   useEffect(() => {
     dispatch(fetchMedicines({ page: 1 }))
@@ -61,8 +63,11 @@ function MedicinePage() {
   const handleAddToCart = async (med) => {
     if (!token) { setAuthModal(true); return }
     const result = await dispatch(updateCart({ productId: med._id, name: med.name, price: med.price, photo: med.photo, quantity: 1 }))
-    if (updateCart.fulfilled.match(result)) toast.success('Sepete eklendi!')
-    else toast.error('Eklenemedi')
+    if (updateCart.fulfilled.match(result)) {
+      toast.success('Sepete eklendi!')
+      setLastAdded(med._id)
+      setTimeout(() => setLastAdded(null), 4000)
+    } else toast.error('Eklenemedi')
   }
 
   const photoUrl = (photo) => photo && photo.trim() ? (photo.startsWith('http') ? photo : `http://localhost:5000${photo}`) : null
@@ -148,7 +153,7 @@ function MedicinePage() {
                   <div key={med._id} className={styles.card}>
                     <div className={styles.cardImg} onClick={() => navigate(`/product/${med._id}`)}>
                       {img
-                        ? <img src={img} alt={med.name} onError={e => { e.target.style.display='none'; e.target.parentNode.dataset.fallback='1' }} />
+                        ? <img src={img} alt={med.name} onError={e => { e.target.style.display='none'; const fb = document.createElement('span'); fb.className='imgFallback'; fb.textContent='💊'; fb.style.cssText='font-size:48px;display:flex;align-items:center;justify-content:center;width:100%;height:100%;'; e.target.parentNode.appendChild(fb); }} />
                         : <span className={styles.cardImgFallback}>💊</span>
                       }
                       <div className={styles.cardOverlay}>
@@ -168,9 +173,15 @@ function MedicinePage() {
                       </div>
                       <p className={styles.medPrice}>{parseFloat(med.price).toFixed(2)} ₺</p>
                       <div className={styles.cardActions}>
-                        <button className={styles.addBtn} onClick={() => handleAddToCart(med)}>
-                          🛒 Sepete Ekle
-                        </button>
+                        {lastAdded === med._id ? (
+                          <button className={styles.goCartBtn} onClick={() => navigate('/cart')}>
+                            Sepete Git →
+                          </button>
+                        ) : (
+                          <button className={styles.addBtn} onClick={() => handleAddToCart(med)}>
+                            🛒 Sepete Ekle
+                          </button>
+                        )}
                         <button className={styles.detailBtn} onClick={() => navigate(`/product/${med._id}`)}>
                           Detay
                         </button>
