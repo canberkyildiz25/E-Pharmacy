@@ -26,17 +26,19 @@ import StatisticsPage  from './pages/franchise/StatisticsPage/StatisticsPage'
 import CreateShopPage  from './pages/franchise/CreateShopPage/CreateShopPage'
 import EditShopPage    from './pages/franchise/EditShopPage/EditShopPage'
 import FranchiseMedicinePage from './pages/franchise/MedicinePage/MedicinePage'
+import FranchiseOrdersPage   from './pages/franchise/OrdersPage/OrdersPage'
 
 // Client pages
 import HomePage          from './pages/client/HomePage/HomePage'
 import MedicineStorePage from './pages/client/MedicineStorePage/MedicineStorePage'
 import MedicinePage      from './pages/client/MedicinePage/MedicinePage'
 import ProductPage       from './pages/client/ProductPage/ProductPage'
+import CartPage          from './pages/client/CartPage/CartPage'
 
 // Role tabanlı varsayılan yönlendirme
 function RoleRedirect() {
   const { token, user } = useSelector((state) => state.auth)
-  if (!token) return <Navigate to="/login" replace />
+  if (!token) return <Navigate to="/home" replace />
   if (user?.role === 'admin')     return <Navigate to="/admin/dashboard" replace />
   if (user?.role === 'franchise') return <Navigate to="/franchise/shop" replace />
   return <Navigate to="/home" replace />
@@ -75,6 +77,7 @@ function App() {
           <Route path="create-shop" element={<CreateShopPage />} />
           <Route path="edit-shop"   element={<EditShopPage />} />
           <Route path="medicine"    element={<FranchiseMedicinePage />} />
+          <Route path="orders"      element={<FranchiseOrdersPage />} />
         </Route>
 
         {/* ── CLIENT ────────────────────────────────── */}
@@ -83,6 +86,7 @@ function App() {
           <Route path="medicine-store" element={<MedicineStorePage />} />
           <Route path="medicine"       element={<MedicinePage />} />
           <Route path="product/:id"    element={<ProductPage />} />
+          <Route path="cart"           element={<CartPage />} />
         </Route>
 
         <Route path="*" element={<Navigate to="/login" replace />} />

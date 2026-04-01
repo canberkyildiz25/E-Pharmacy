@@ -26,10 +26,10 @@ function Header({ isAuth }) {
         <Logo to={isAuth ? '/shop' : '/register'} />
         {isAuth && (
           <nav className={styles.nav}>
-            <NavLink to="/franchise/shop" className={({ isActive }) => `${styles.link} ${isActive ? styles.active : ''}`}>Shop</NavLink>
-            <NavLink to="/medicine/all" className={({ isActive }) => `${styles.link} ${isActive ? styles.active : ''}`}>Medicine</NavLink>
-            <NavLink to="/franchise/statistics" className={({ isActive }) => `${styles.link} ${isActive ? styles.active : ''}`}>Statistics</NavLink>
-            <button className={styles.logoutBtn} onClick={handleLogout}>Log out</button>
+            <NavLink to="/franchise/shop" className={({ isActive }) => `${styles.link} ${isActive ? styles.active : ''}`}>Mağazam</NavLink>
+            <NavLink to="/franchise/orders" className={({ isActive }) => `${styles.link} ${isActive ? styles.active : ''}`}>Siparişler</NavLink>
+            <NavLink to="/franchise/statistics" className={({ isActive }) => `${styles.link} ${isActive ? styles.active : ''}`}>İstatistikler</NavLink>
+            <button className={styles.logoutBtn} onClick={handleLogout}>Çıkış Yap</button>
           </nav>
         )}
       </div>

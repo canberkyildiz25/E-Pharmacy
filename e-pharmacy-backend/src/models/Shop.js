@@ -11,6 +11,8 @@ const shopSchema = new mongoose.Schema({
   zipCode: { type: String, required: true },
   hasOwnDelivery: { type: Boolean, default: false },
   logo: { type: String, default: '' },
+  lat: { type: Number, default: null },
+  lng: { type: Number, default: null },
 }, { timestamps: true });
 
 module.exports = mongoose.model('Shop', shopSchema);

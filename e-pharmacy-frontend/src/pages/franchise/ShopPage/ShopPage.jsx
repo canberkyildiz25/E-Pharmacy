@@ -46,20 +46,20 @@ function ShopPage() {
 
   const handleAddMedicine = async (formData) => {
     const result = await dispatch(addMedicine({ shopId: user.shopId, formData }))
-    if (addMedicine.fulfilled.match(result)) { toast.success('Medicine added!'); setAddModal(false) }
-    else toast.error(result.payload || 'Failed')
+    if (addMedicine.fulfilled.match(result)) { toast.success('İlaç eklendi!'); setAddModal(false) }
+    else toast.error(result.payload || 'Hata oluştu')
   }
 
   const handleEditMedicine = async (formData) => {
     const result = await dispatch(editMedicine({ shopId: user.shopId, productId: editModal._id, formData }))
-    if (editMedicine.fulfilled.match(result)) { toast.success('Medicine updated!'); setEditModal(null) }
-    else toast.error(result.payload || 'Failed')
+    if (editMedicine.fulfilled.match(result)) { toast.success('İlaç güncellendi!'); setEditModal(null) }
+    else toast.error(result.payload || 'Hata oluştu')
   }
 
   const handleDeleteMedicine = async () => {
     const result = await dispatch(deleteMedicine({ shopId: user.shopId, productId: deleteModal._id }))
-    if (deleteMedicine.fulfilled.match(result)) { toast.success('Medicine deleted!'); setDeleteModal(null) }
-    else toast.error(result.payload || 'Failed')
+    if (deleteMedicine.fulfilled.match(result)) { toast.success('İlaç silindi!'); setDeleteModal(null) }
+    else toast.error(result.payload || 'Hata oluştu')
   }
 
   const myMedicines = medicines.filter(m => m.shop === user?.shopId || m.shop?._id === user?.shopId)
@@ -68,9 +68,9 @@ function ShopPage() {
     return (
       <div className={styles.noShop}>
         <span className={styles.noShopIcon}>🏪</span>
-        <h2>You don&apos;t have a shop yet</h2>
-        <p>Create your pharmacy shop to get started</p>
-        <button className={styles.createBtn} onClick={() => navigate('/franchise/create-shop')}>Create Shop</button>
+        <h2>Henüz eczaneniz yok</h2>
+        <p>Başlamak için eczanenizi oluşturun</p>
+        <button className={styles.createBtn} onClick={() => navigate('/franchise/create-shop')}>Eczane Oluştur</button>
       </div>
     )
   }
@@ -83,40 +83,40 @@ function ShopPage() {
           <div className={styles.shopInfo}>
             {shop?.logo && <img src={`http://localhost:5001${shop.logo}`} alt="logo" className={styles.shopLogo} />}
             <div>
-              <h1 className={styles.shopName}>{shop?.shopName || 'My Shop'}</h1>
-              <p className={styles.shopMeta}>Owner: {shop?.ownerName} · {shop?.streetAddress}, {shop?.city} · {shop?.phone}</p>
+              <h1 className={styles.shopName}>{shop?.shopName || 'Eczanem'}</h1>
+              <p className={styles.shopMeta}>Sahip: {shop?.ownerName} · {shop?.streetAddress}, {shop?.city} · {shop?.phone}</p>
             </div>
           </div>
           <div className={styles.shopActions}>
-            <button className={styles.editBtn} onClick={() => navigate('/franchise/edit-shop')}>Edit data</button>
-            <button className={styles.addBtn} onClick={() => setAddModal(true)}>+ Add medicine</button>
+            <button className={styles.editBtn} onClick={() => navigate('/franchise/edit-shop')}>Bilgileri Düzenle</button>
+            <button className={styles.addBtn} onClick={() => setAddModal(true)}>+ İlaç Ekle</button>
           </div>
         </div>
 
         {/* Tabs */}
         <div className={styles.tabs}>
-          <button className={`${styles.tab} ${activeTab === 'drugstore' ? styles.activeTab : ''}`} onClick={() => setActiveTab('drugstore')}>Drug store</button>
-          <button className={`${styles.tab} ${activeTab === 'all' ? styles.activeTab : ''}`} onClick={() => setActiveTab('all')}>All medicine</button>
+          <button className={`${styles.tab} ${activeTab === 'drugstore' ? styles.activeTab : ''}`} onClick={() => setActiveTab('drugstore')}>Eczanem</button>
+          <button className={`${styles.tab} ${activeTab === 'all' ? styles.activeTab : ''}`} onClick={() => setActiveTab('all')}>Tüm İlaçlar</button>
         </div>
 
         {/* All Medicine Tab - Filter */}
         {activeTab === 'all' && (
           <div className={styles.filterBar}>
             <select className={styles.select} value={searchCategory} onChange={(e) => setSearchCategory(e.target.value)}>
-              <option value="">Product category</option>
+              <option value="">Kategori seçin</option>
               {categories.map(c => <option key={c} value={c}>{c}</option>)}
             </select>
-            <input className={styles.searchInput} placeholder="Search medicine" value={searchName} onChange={(e) => setSearchName(e.target.value)} onKeyDown={(e) => e.key === 'Enter' && handleFilter()} />
-            <button className={styles.filterBtn} onClick={handleFilter}>Filter</button>
+            <input className={styles.searchInput} placeholder="İlaç ara" value={searchName} onChange={(e) => setSearchName(e.target.value)} onKeyDown={(e) => e.key === 'Enter' && handleFilter()} />
+            <button className={styles.filterBtn} onClick={handleFilter}>Filtrele</button>
           </div>
         )}
 
         {/* Medicine Grid */}
         <div className={styles.grid}>
           {loading ? (
-            <p className={styles.loading}>Loading...</p>
+            <p className={styles.loading}>Yükleniyor...</p>
           ) : (activeTab === 'drugstore' ? myMedicines : medicines).length === 0 ? (
-            <p className={styles.empty}>No medicines found</p>
+            <p className={styles.empty}>İlaç bulunamadı</p>
           ) : (activeTab === 'drugstore' ? myMedicines : medicines).map(med => (
             <div key={med._id} className={styles.card}>
               <div className={styles.cardImg}>
@@ -124,17 +124,17 @@ function ShopPage() {
               </div>
               <div className={styles.cardBody}>
                 <h3 className={styles.medName}>{med.name}</h3>
-                <p className={styles.medPrice}>${med.price}</p>
+                <p className={styles.medPrice}>{med.price} ₺</p>
                 <div className={styles.cardActions}>
                   {activeTab === 'all' ? (
                     <>
-                      <button className={styles.addToShopBtn} onClick={() => toast.success('Added to shop!')}>Add to shop</button>
-                      <button className={styles.detailsBtn} onClick={() => navigate(`/medicine/${med._id}`)}>Details</button>
+                      <button className={styles.addToShopBtn} onClick={() => toast.success('Eczaneye eklendi!')}>Eczaneye Ekle</button>
+                      <button className={styles.detailsBtn} onClick={() => navigate(`/medicine/${med._id}`)}>Detay</button>
                     </>
                   ) : (
                     <>
-                      <button className={styles.cardEditBtn} onClick={() => setEditModal(med)}>Edit</button>
-                      <button className={styles.cardDeleteBtn} onClick={() => setDeleteModal(med)}>Delete</button>
+                      <button className={styles.cardEditBtn} onClick={() => setEditModal(med)}>Düzenle</button>
+                      <button className={styles.cardDeleteBtn} onClick={() => setDeleteModal(med)}>Sil</button>
                     </>
                   )}
                 </div>

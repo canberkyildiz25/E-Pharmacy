@@ -43,7 +43,7 @@ function Header() {
           {token ? (
             <>
               <span className={styles.userName}>{user?.name}</span>
-              <Link to="/medicine" className={styles.cartBtn}>
+              <Link to="/cart" className={styles.cartBtn}>
                 🛒 {cartCount > 0 && <span className={styles.cartBadge}>{cartCount}</span>}
               </Link>
               <button className={styles.logoutBtn} onClick={handleLogout}>Çıkış Yap</button>

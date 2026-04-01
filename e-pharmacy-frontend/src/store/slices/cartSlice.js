@@ -19,9 +19,9 @@ export const updateCart = createAsyncThunk('cart/update', async (item, { rejectW
   }
 })
 
-export const checkout = createAsyncThunk('cart/checkout', async (_, { rejectWithValue }) => {
+export const checkout = createAsyncThunk('cart/checkout', async (payload, { rejectWithValue }) => {
   try {
-    const res = await api.post('/cart/checkout')
+    const res = await api.post('/cart/checkout', payload)
     return res.data
   } catch (err) {
     return rejectWithValue(err.response?.data?.message)

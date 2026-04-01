@@ -31,6 +31,19 @@ const RECOVERY_STORIES = [
   },
 ]
 
+const PHARMACY_IMAGES = [
+  'https://images.unsplash.com/photo-1587854692152-cbe660dbde88?w=600&q=70',
+  'https://images.unsplash.com/photo-1631549916768-4119b2e5f926?w=600&q=70',
+  'https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?w=600&q=70',
+  'https://images.unsplash.com/photo-1576671081837-49000212a370?w=600&q=70',
+  'https://images.unsplash.com/photo-1550572017-edd951b55104?w=600&q=70',
+  'https://images.unsplash.com/photo-1559757148-5c350d0d3c56?w=600&q=70',
+  'https://images.unsplash.com/photo-1585435557343-3b092031a831?w=600&q=70',
+  'https://images.unsplash.com/photo-1471864190281-a93a3070b6de?w=600&q=70',
+  'https://images.unsplash.com/photo-1516549655169-df83a0774514?w=600&q=70',
+  'https://images.unsplash.com/photo-1603398938378-e54eab446dde?w=600&q=70',
+]
+
 const MEDICINE_SHOWCASE = [
   { img: 'https://images.unsplash.com/photo-1550572017-edd951b55104?w=500&q=80', label: 'Vitamin & Takviye' },
   { img: 'https://images.unsplash.com/photo-1631549916768-4119b2e5f926?w=500&q=80', label: 'Reçeteli İlaçlar' },
@@ -152,11 +165,11 @@ function MedicineStorePage() {
             </div>
           ) : (
             <div className={styles.grid}>
-              {filtered.map(store => (
+              {filtered.map((store, idx) => (
                 <div key={store._id} className={styles.card}>
                   <div className={styles.cardImgWrap}>
                     <img
-                      src={`https://images.unsplash.com/photo-1587854692152-cbe660dbde88?w=600&q=70`}
+                      src={store.coverImage || PHARMACY_IMAGES[idx % PHARMACY_IMAGES.length]}
                       alt={store.shopName}
                       className={styles.cardImg}
                     />

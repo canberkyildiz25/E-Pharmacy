@@ -1,9 +1,10 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import api from '../../services/api'
 
-export const fetchNearestStores = createAsyncThunk('store/fetchNearest', async (_, { rejectWithValue }) => {
+export const fetchNearestStores = createAsyncThunk('store/fetchNearest', async (coords, { rejectWithValue }) => {
   try {
-    const res = await api.get('/stores/nearest')
+    const params = coords ? `?lat=${coords.lat}&lng=${coords.lng}` : ''
+    const res = await api.get(`/stores/nearest${params}`)
     return res.data
   } catch (err) {
     return rejectWithValue(err.response?.data?.message)
