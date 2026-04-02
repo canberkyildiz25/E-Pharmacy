@@ -106,18 +106,19 @@ Uygulama `http://localhost:5173` adresinde çalışır.
 
 ## Test Hesapları
 
-Seed scriptini çalıştırarak hazır test verisi oluşturabilirsin:
+Seed scriptlerini sırasıyla çalıştırarak hazır test verisi oluşturabilirsin:
 
 ```bash
 cd e-pharmacy-backend
-node seed-data.js
+node seed-data.js      # eczaneler, ilaçlar ve franchise hesapları
+node seed-admin.js     # admin hesabı
 ```
 
 | Rol | E-posta | Şifre |
 |-----|---------|-------|
-| Müşteri | `client@epharmacy.com` | `123456` |
-| Eczane Sahibi | `franchise@epharmacy.com` | `123456` |
-| Admin | `admin@epharmacy.com` | `123456` |
+| Eczane Sahibi | `eczane1@epharmacy.com` | `eczane123` |
+| Eczane Sahibi | `eczane2@epharmacy.com` | `eczane123` |
+| Admin | `admin@epharmacy.com` | `admin123` |
 
 ---
 
