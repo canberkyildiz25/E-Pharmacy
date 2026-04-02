@@ -18,7 +18,7 @@ const RECOVERY_STORIES = [
     rating: 5,
   },
   {
-    img: 'https://images.unsplash.com/photo-1582750433449-648ed127bb54?w=400&q=80',
+    img: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&q=80',
     name: 'Mehmet D.',
     quote: 'Kronik ilaçlarımı düzenli alabiliyorum. Stok asla bitmiyor, çok memnunum.',
     rating: 5,
