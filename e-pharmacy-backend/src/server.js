@@ -32,7 +32,15 @@ const app = express();
 app.use(helmet({ crossOriginResourcePolicy: false }));
 app.use(morgan('dev'));
 app.use(cors({
-  origin: ['http://localhost:5173', 'http://localhost:3000'],
+  origin: (origin, callback) => {
+    const allowed = [
+      'http://localhost:5173',
+      'http://localhost:3000',
+      process.env.FRONTEND_URL,
+    ].filter(Boolean);
+    if (!origin || allowed.includes(origin)) return callback(null, true);
+    callback(new Error('CORS: izin verilmeyen origin'));
+  },
   credentials: true,
 }));
 app.use(express.json());
