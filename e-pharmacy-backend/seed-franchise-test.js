@@ -57,8 +57,8 @@ async function run() {
   console.log('MongoDB bağlandı');
 
   // Kullanıcı
-  const user = await User.findOne({ email: 'franchise@epharmacy.com' });
-  if (!user) { console.error('franchise@epharmacy.com bulunamadı'); process.exit(1); }
+  const user = await User.findOne({ email: 'canberkyildiz2@yandex.com' });
+  if (!user) { console.error('canberkyildiz2@yandex.com bulunamadı'); process.exit(1); }
   console.log('Kullanıcı:', user.name);
 
   // Shop oluştur (varsa geç)
@@ -68,7 +68,7 @@ async function run() {
       owner: user._id,
       shopName: 'Demo Eczanesi',
       ownerName: 'Test Franchise',
-      email: 'franchise@epharmacy.com',
+      email: 'canberkyildiz2@yandex.com',
       phone: '0212 999 00 11',
       streetAddress: 'Bağcılar Cad. No:5',
       city: 'İstanbul',
@@ -98,7 +98,7 @@ async function run() {
   // 20 adet test siparişi oluştur
   const statuses = ['Beklemede','Beklemede','Onaylandı','Hazırlanıyor','Teslimatta','Teslim Edildi','Teslim Edildi','Teslim Edildi'];
   const orders = [];
-  for (let i = 0; i < 20; i++) {
+  for (let i = 0; i < 60; i++) {
     const customer = pick(CUSTOMERS);
     const items = pickN(medDocs, Math.floor(Math.random() * 3) + 1).map(m => ({
       productId: m._id.toString(),
