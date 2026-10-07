@@ -1,154 +1,167 @@
-# E-Pharmacy 💊
+# E-Pharmacy
 
-Eczaneleri, müşterileri ve eczane sahiplerini tek platformda buluşturan dijital eczane sistemi.
+A marketplace for pharmacies: customers find the nearest one and order from it, pharmacy owners run their shop and its stock, and an administrator oversees the whole platform. One API, one front end, three kinds of account.
 
-![E-Pharmacy Banner](https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?w=1200&q=80)
+**Live:** https://e-pharmacy-1.onrender.com/
 
----
+The live copy runs on Render's free tier, so the first request after a quiet spell can take the best part of a minute while the server wakes.
 
-## Özellikler
+It started as a course project of four separate apps (two admin panels, a client and a landing page). I folded them into one back end and one front end with a single sign-in that knows which of the three you are.
 
-### 👤 Müşteri Paneli
-- Konuma göre yakın eczaneleri keşfet (Geolocation API)
-- İlaç ara, filtrele ve sipariş ver
-- Sepet yönetimi — adres, telefon ve teslimat notu ile sipariş tamamla
-- Sipariş geçmişini takip et
+## What each kind of account can do
 
-### 🏪 Franchise (Eczane) Paneli
-- Eczane profili oluştur ve düzenle
-- İlaç envanterini yönet (ekle, düzenle, sil)
-- Gelen siparişleri listele ve durumlarını güncelle
-- Gelir/gider istatistikleri ve sipariş özeti
+**A customer**
 
-### ⚙️ Admin Paneli
-- Platform geneli kullanıcı ve eczane yönetimi
-- Tüm siparişleri ve istatistikleri görüntüle
+- Find pharmacies near them, nearest first. The browser gives the position, and distance is worked out with the haversine formula.
+- Search and filter medicines and put them in a basket.
+- Check out with an address, a phone number and a note for the delivery.
+- See their past orders, and review a pharmacy.
 
----
+**A pharmacy owner**
 
-## Ekran Görüntüleri
+- Create and edit the shop's profile. The address is turned into coordinates through Nominatim (OpenStreetMap), so that the shop can be found by distance.
+- Manage the medicines on the shelf: add, edit, delete, with a photograph.
+- See incoming orders and move each one through its states.
+- Read income, expenses and a summary of orders.
 
-| Ana Sayfa | Eczane Paneli | Siparişler |
-|-----------|--------------|------------|
-| Yakın eczane arama, üyelik planları | İlaç envanteri yönetimi | Sipariş durumu takibi |
+**An administrator**
 
----
+- Manage customers, pharmacies, products and suppliers across the platform.
+- See every order, and the figures for the platform as a whole.
 
-## Teknoloji Stack
+## Stack
 
-### Backend
-| Teknoloji | Kullanım |
-|-----------|----------|
-| Node.js + Express | REST API |
-| MongoDB + Mongoose | Veritabanı |
-| JWT | Kimlik doğrulama |
-| bcryptjs | Şifre hashleme |
-| Multer | Dosya yükleme |
-| Helmet + CORS | Güvenlik |
+**Back end**
 
-### Frontend
-| Teknoloji | Kullanım |
-|-----------|----------|
-| React 18 + Vite | UI framework |
-| Redux Toolkit | State yönetimi |
-| React Router v6 | Sayfa yönlendirme |
-| React Hook Form + Yup | Form yönetimi ve validasyon |
-| CSS Modules | Component bazlı stil |
-| Axios | HTTP istekleri |
-| React Hot Toast | Bildirimler |
+| | |
+| --- | --- |
+| Node.js and Express | The REST API |
+| MongoDB and Mongoose | The database |
+| JSON Web Tokens | Who is signed in, and as what |
+| bcryptjs | Password hashes |
+| Multer | Uploaded photographs |
+| Helmet and CORS | Headers, and which site may call the API |
 
-### Harici Servisler
-- **Nominatim (OpenStreetMap)** — Adres → koordinat dönüşümü
-- **Haversine formülü** — Mesafeye göre eczane sıralama
-- **Browser Geolocation API** — Kullanıcı konumu
+**Front end**
 
----
+| | |
+| --- | --- |
+| React 18 and Vite | The interface |
+| Redux Toolkit | State |
+| React Router 6 | Routes, with the private ones guarded by role |
+| React Hook Form and Yup | Forms and their validation |
+| CSS Modules | Styling, one file per component |
+| Axios | Requests |
+| React Hot Toast | Messages |
 
-## Kurulum
+**From outside:** Nominatim for turning an address into coordinates, and the browser's Geolocation API for where the customer is.
 
-### Gereksinimler
-- Node.js 18+
-- MongoDB (yerel veya Atlas)
+## Run it
 
-### 1. Repoyu klonla
+Node 18 or newer, and MongoDB, on your machine or on Atlas.
+
 ```bash
 git clone https://github.com/canberkyildiz25/E-Pharmacy.git
 cd E-Pharmacy
 ```
 
-### 2. Backend kurulumu
+**The back end**
+
 ```bash
 cd e-pharmacy-backend
 npm install
 ```
 
-`e-pharmacy-backend/.env` dosyası oluştur:
+Make a file called `.env` in `e-pharmacy-backend/`:
+
 ```env
 MONGODB_URI=mongodb://localhost:27017/epharmacy
-JWT_SECRET=your_jwt_secret_key
+JWT_SECRET=a_long_random_string_of_your_own
 PORT=5000
 ```
 
 ```bash
-npm run dev
+npm run dev      # with reloading
+npm start        # without
 ```
 
-### 3. Frontend kurulumu
+**The front end**
+
 ```bash
 cd ../e-pharmacy-frontend
 npm install
-npm run dev
+npm run dev        # http://localhost:5173
+npm run build      # the production build, into dist/
+npm run preview
 ```
 
-Uygulama `http://localhost:5173` adresinde çalışır.
+| Variable | Where | What it is for |
+| --- | --- | --- |
+| `MONGODB_URI` | back end | The database |
+| `JWT_SECRET` | back end | Signs the tokens |
+| `JWT_EXPIRE` | back end | How long a token lasts. Optional. |
+| `PORT` | back end | The port the API listens on |
+| `FRONTEND_URL` | back end | The site allowed to call the API |
+| `VITE_API_URL` | front end | Where the API is |
 
----
+## Sample data and accounts to try
 
-## Test Hesapları
-
-Seed scriptlerini sırasıyla çalıştırarak hazır test verisi oluşturabilirsin:
+The seed scripts fill an empty database:
 
 ```bash
 cd e-pharmacy-backend
-node seed-data.js      # eczaneler, ilaçlar ve franchise hesapları
-node seed-admin.js     # admin hesabı
+node seed-data.js      # pharmacies, medicines and owner accounts
+node seed-admin.js     # the administrator
 ```
 
-| Rol | E-posta | Şifre |
-|-----|---------|-------|
-| Eczane Sahibi | `eczane1@epharmacy.com` | `eczane123` |
-| Eczane Sahibi | `eczane2@epharmacy.com` | `eczane123` |
-| Admin | `admin@epharmacy.com` | `admin123` |
+| Role | Email | Password |
+| --- | --- | --- |
+| Pharmacy owner | `eczane1@epharmacy.com` | `eczane123` |
+| Pharmacy owner | `eczane2@epharmacy.com` | `eczane123` |
+| Administrator | `admin@epharmacy.com` | `admin123` |
 
----
+These exist only in a database you have seeded yourself. Change them before putting anything on a public address.
 
-## Proje Yapısı
+`geocode-existing.js` and `geocode-fallback.js` fill in coordinates for pharmacies that were saved without them.
+
+## Layout of the code
 
 ```
-E-Pharmacy/
-├── e-pharmacy-backend/
-│   ├── src/
-│   │   ├── models/          # Mongoose şemaları
-│   │   ├── routes/
-│   │   │   ├── client/      # Müşteri API'leri
-│   │   │   ├── franchise/   # Eczane API'leri
-│   │   │   └── admin/       # Admin API'leri
-│   │   └── server.js
-│   └── seed-data.js
-│
-└── e-pharmacy-frontend/
-    └── src/
-        ├── components/      # Yeniden kullanılabilir bileşenler
-        ├── pages/
-        │   ├── client/      # Müşteri sayfaları
-        │   ├── franchise/   # Eczane sayfaları
-        │   └── admin/       # Admin sayfaları
-        └── store/
-            └── slices/      # Redux slice'ları
+e-pharmacy-backend/
+  src/
+    server.js
+    models/            User, Shop, Medicine, Product, Cart, Order, ShopOrder, Customer,
+                       CustomerReview, Supplier, IncomeExpense
+    routes/
+      auth.js          one sign-in for all three roles
+      client/          stores, medicines, cart, reviews
+      franchise/       shop, orders, statistics
+      admin/           dashboard, customers, franchises, orders, products, suppliers
+    middleware/        auth (who you are), role (what you may do), upload
+  seed-*.js, geocode-*.js, fix-medicines.js
+
+e-pharmacy-frontend/
+  src/
+    App.jsx            routes
+    pages/
+      client/          the customer's pages
+      franchise/       the pharmacy owner's pages
+      admin/           the administrator's pages
+      LoginPage, RegisterPage
+    components/        client/, franchise/, admin/, and PrivateRoute
+    store/slices/      the Redux slices
+  public/_redirects    sends every path to index.html
 ```
 
----
+## Deploying
 
-## Lisans
+Two services on Render: the API as a web service, and the front end as a static site built with `npm run build` and published from `dist`.
 
-MIT
+## Notes
+
+- This is a demonstration. The pharmacies and medicines are sample data, and nothing can really be ordered.
+- The interface is in Turkish.
+
+## Author
+
+[Canberk Yıldız](https://canberkyildiz.netlify.app)
