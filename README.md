@@ -2,6 +2,8 @@
 
 Find the pharmacy in Istanbul that is open now, see what is on its shelf, and order ahead. *Nöbet* is Turkish for a watch: the night one pharmacy stays open so that the others can close.
 
+**Live:** https://nobet-istanbul.vercel.app
+
 This started as E-Pharmacy, a course project of four separate apps (two admin panels, a client and a landing page) on a stock design, with an Express server behind them. I rebuilt it from nothing as one app, around the question somebody actually has at two in the morning: which one is open, and does it have what I need.
 
 It is a demonstration. The pharmacies are examples with invented names and addresses, the prices are made up, and an order placed here reaches nobody.
