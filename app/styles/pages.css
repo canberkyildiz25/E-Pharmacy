@@ -1,0 +1,113 @@
+/* The pages that are read rather than used: how it works, the credits, and
+   the two that say something went wrong. */
+
+@layer components {
+  /* a picture across the head of a page */
+  .plate {
+    aspect-ratio: 16 / 10;
+    overflow: clip;
+    border-radius: var(--r-face);
+    background: var(--night-2);
+  }
+  .plate img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  @media (min-width: 48rem) {
+    .plate {
+      aspect-ratio: 21 / 9;
+    }
+  }
+
+  .plate + .facts {
+    margin-top: clamp(2rem, 4vw, 3rem);
+  }
+
+  /* one thing explained: what it is about on the left, the explanation on the right */
+  .told {
+    display: grid;
+    gap: 1rem;
+    padding-block: clamp(2rem, 4vw, 3rem);
+    border-top: 1px solid var(--line);
+  }
+  .told h2 {
+    font-size: clamp(1.625rem, 2.6vw, 2.25rem);
+    line-height: 1.06;
+    letter-spacing: -0.024em;
+  }
+  .told__say {
+    display: grid;
+    gap: 1rem;
+    max-width: 36rem;
+    color: var(--ink-2);
+  }
+  .told__say strong {
+    font-weight: 500;
+    color: var(--ink);
+  }
+  .told__say .fig {
+    color: var(--amber-pale);
+  }
+  .told__say ul {
+    display: grid;
+    gap: 0.5rem;
+  }
+  .told__say li {
+    display: grid;
+    grid-template-columns: 0.625rem minmax(0, 1fr);
+    align-items: baseline;
+    gap: 0.75rem;
+  }
+  .told .band {
+    margin-top: 1.5rem;
+  }
+  .told__say li::before {
+    content: '';
+    width: 0.375rem;
+    height: 0.375rem;
+    border-radius: 50%;
+    background: var(--amber);
+    transform: translateY(-0.125rem);
+  }
+  @media (min-width: 64rem) {
+    .told {
+      grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+      gap: 2rem;
+    }
+  }
+
+  /* ---------- A page that is not there, or did not load ---------- */
+  .astray {
+    display: grid;
+    align-content: center;
+    justify-items: start;
+    gap: 1.5rem;
+    min-height: calc(100svh - var(--mast) - 12rem);
+    max-width: 44rem;
+    padding-block: clamp(3rem, 8vw, 6rem);
+  }
+  .astray h1 {
+    font-size: var(--t-h1);
+    line-height: 0.96;
+    letter-spacing: -0.035em;
+  }
+  .astray p {
+    max-width: 34rem;
+    font-size: var(--t-lede);
+    line-height: 1.5;
+    color: var(--ink-2);
+  }
+  .astray div {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+}
+
+@media print {
+  .plate {
+    display: none;
+  }
+}

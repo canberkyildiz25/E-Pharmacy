@@ -1,0 +1,1058 @@
+/* The customer's side: pharmacies in a list, medicines in a list, a pharmacy's
+   own page, a medicine's own page, the basket, and an order. */
+
+@layer components {
+  /* ---------- Where the visitor is ---------- */
+  .where {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  /* this sheet is read before the shared one, so a shared control is named with its place to be changed here */
+  .where .where__pick {
+    flex: none;
+    width: 12rem;
+    background-color: color-mix(in oklab, var(--night) 72%, transparent);
+  }
+  .where .where__find {
+    background: color-mix(in oklab, var(--night) 72%, transparent);
+  }
+  .where .where__find[aria-pressed='true'] {
+    border-color: var(--amber);
+  }
+
+  /* ---------- Pharmacies in a list ---------- */
+  .rows {
+    display: grid;
+  }
+  .row {
+    position: relative;
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    align-items: baseline;
+    gap: 0.25rem 1rem;
+    padding-block: clamp(1rem, 1.8vw, 1.5rem);
+    border-top: 1px solid var(--line);
+  }
+  .row .lamp {
+    align-self: center;
+    grid-row: 1;
+  }
+  .row__what {
+    display: grid;
+    gap: 0.25rem;
+    min-width: 0;
+  }
+  /* an open pharmacy is in full light; a closed one stands back */
+  .row__name {
+    font-size: clamp(1.75rem, 3.4vw, 3rem);
+    font-weight: 300;
+    line-height: 1.04;
+    letter-spacing: -0.03em;
+    color: var(--ink-3);
+    transition: color 300ms ease;
+  }
+  .row[data-open] .row__name {
+    color: var(--ink);
+  }
+  .row__name a {
+    text-decoration: none;
+  }
+  /* the whole row is the link */
+  .row__name a::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+  }
+  .row__name a:focus-visible {
+    outline: none;
+  }
+  .row__name a:focus-visible::after {
+    outline: 2px solid var(--focus);
+    outline-offset: -2px;
+  }
+  .row__name a:active {
+    opacity: 0.7;
+  }
+  .row__place {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0 1rem;
+    font-size: 0.9375rem;
+    color: var(--ink-2);
+  }
+  .row__place span {
+    color: var(--ink-3);
+  }
+  .row__now {
+    grid-column: 2;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0 1.5rem;
+    font-size: 0.9375rem;
+    color: var(--ink-3);
+  }
+  .row[data-open] .row__line {
+    color: var(--amber-pale);
+  }
+  .row__now .fig {
+    color: var(--ink-2);
+  }
+  @media (hover: hover) and (pointer: fine) {
+    .row:hover .row__name {
+      color: var(--amber-pale);
+    }
+  }
+  @media (min-width: 48rem) {
+    .row {
+      grid-template-columns: auto minmax(0, 1fr) auto;
+      gap: 0 1.5rem;
+    }
+    .row__now {
+      grid-column: 3;
+      display: grid;
+      justify-items: end;
+      gap: 0.25rem;
+      text-align: right;
+    }
+  }
+
+  /* ---------- Medicines in a list ---------- */
+  .nophoto {
+    display: block;
+    width: 100%;
+    height: 100%;
+    background: var(--night-3);
+  }
+  .tiles {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 2.5rem 1.25rem;
+  }
+  .tile {
+    position: relative;
+    display: grid;
+    align-content: start;
+    gap: 0.5rem;
+    min-width: 0;
+  }
+  .tile__photo {
+    aspect-ratio: 1;
+    margin-bottom: 0.5rem;
+    overflow: clip;
+    border-radius: var(--r-face);
+    background: var(--night-3);
+  }
+  .tile__photo img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 1400ms var(--ease-slow);
+  }
+  .tile__name {
+    font-size: 1.25rem;
+    font-weight: 400;
+    line-height: 1.16;
+    letter-spacing: -0.012em;
+  }
+  .tile__name a {
+    text-decoration: none;
+  }
+  .tile__name a::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+  }
+  .tile__name a:focus-visible {
+    outline: none;
+  }
+  .tile__name a:focus-visible::after {
+    outline: 2px solid var(--focus);
+    outline-offset: 4px;
+    border-radius: var(--r-face);
+  }
+  .tile__name a:active {
+    opacity: 0.7;
+  }
+  .tile__form {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0 1rem;
+    font-size: 0.9375rem;
+    color: var(--ink-2);
+  }
+  .tile__form .fig {
+    color: var(--amber-pale);
+  }
+  @media (hover: hover) and (pointer: fine) {
+    .tile:hover .tile__photo img {
+      transform: scale(1.04);
+    }
+  }
+  @media (min-width: 40rem) {
+    .tiles {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 3.5rem 1.5rem;
+    }
+  }
+  @media (min-width: 64rem) {
+    .tiles {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 4rem 2rem;
+    }
+  }
+
+  /* ---------- Narrowing a list ---------- */
+  .narrow {
+    display: grid;
+    gap: 1rem;
+  }
+  .narrow .narrow__search .input {
+    max-width: 26rem;
+  }
+  .narrow__sum {
+    margin-block: 1.5rem clamp(1.5rem, 3vw, 2.5rem);
+    font-size: 0.9375rem;
+    color: var(--ink-2);
+  }
+  .narrow__sum .fig {
+    color: var(--amber-pale);
+  }
+  @media (min-width: 64rem) {
+    .narrow {
+      grid-template-columns: auto minmax(0, 1fr);
+      align-items: center;
+      gap: 1.5rem;
+    }
+    .narrow__show .choices {
+      justify-content: flex-end;
+    }
+    .narrow .narrow__search .input {
+      width: 22rem;
+    }
+  }
+
+  /* ---------- Nothing at this address ---------- */
+  .lost {
+    display: grid;
+    align-content: center;
+    justify-items: start;
+    gap: 1.5rem;
+    min-height: 60svh;
+    max-width: 44rem;
+  }
+  .lost h1 {
+    font-size: var(--t-h2);
+  }
+  .lost p {
+    max-width: 34rem;
+    color: var(--ink-2);
+  }
+
+  /* ---------- A part of a page, under its own heading ---------- */
+  .part {
+    margin-top: var(--air);
+  }
+  .part > h2,
+  .part__head h2 {
+    font-size: var(--t-h2);
+    line-height: 1;
+  }
+  .part > h2 {
+    margin-bottom: clamp(1.5rem, 3vw, 2.5rem);
+  }
+  .part__head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 1.5rem 2rem;
+    margin-bottom: clamp(1.5rem, 3vw, 2.5rem);
+  }
+  .part__none {
+    max-width: 36rem;
+    color: var(--ink-2);
+  }
+  .part__none + .part__none,
+  .said + .part__none {
+    margin-top: 1.5rem;
+  }
+
+  /* ---------- A pharmacy's own page ---------- */
+  .shop {
+    padding-top: clamp(1.5rem, 4vw, 3.5rem);
+  }
+  .shop__now {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+    color: var(--ink-2);
+  }
+  .shop__now[data-open] {
+    color: var(--amber-pale);
+  }
+  .shop h1 {
+    font-size: var(--t-h1);
+    line-height: 0.96;
+    letter-spacing: -0.035em;
+  }
+  .shop__note {
+    margin-top: 1.5rem;
+    max-width: 36rem;
+    font-size: var(--t-lede);
+    line-height: 1.5;
+    color: var(--ink-2);
+  }
+  /* what there is to know, each fact under the word for it */
+  .facts {
+    display: grid;
+    gap: 0 2rem;
+    margin-top: clamp(2.5rem, 5vw, 4rem);
+  }
+  .facts > div {
+    display: grid;
+    align-content: start;
+    gap: 0.5rem;
+    padding-block: 1.25rem;
+    border-top: 1px solid var(--line);
+  }
+  .facts dd {
+    line-height: 1.45;
+  }
+  .facts small {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0 0.75rem;
+    margin-top: 0.25rem;
+    font-size: 0.9375rem;
+    color: var(--ink-2);
+  }
+  .facts small .fig {
+    color: var(--amber-pale);
+  }
+  @media (min-width: 40rem) {
+    .facts {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+  @media (min-width: 72rem) {
+    .facts {
+      grid-template-columns: 1.3fr 0.8fr 1.1fr 1.1fr;
+    }
+  }
+  .shop__acts {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 1.5rem;
+  }
+  .shop__sample {
+    margin-top: 1rem;
+    max-width: 36rem;
+    font-size: 0.9375rem;
+    color: var(--ink-3);
+  }
+  /* the shop itself: a picture beside its name, or under it on a narrow screen */
+  .shop {
+    display: grid;
+    gap: clamp(2rem, 4vw, 3rem);
+  }
+  .shop .facts {
+    margin-top: 0;
+  }
+  .shop__photo {
+    /* on a narrow screen the picture comes first, and the name under it */
+    order: -1;
+    aspect-ratio: 16 / 10;
+    overflow: clip;
+    border-radius: var(--r-face);
+    background: var(--night-2);
+  }
+  .shop__photo img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  /* it opens from the middle outwards, once, like a shutter going up */
+  html.live .shop__photo img {
+    animation: unshutter 700ms var(--ease-slow) both;
+  }
+  @keyframes unshutter {
+    from {
+      clip-path: inset(8% 6% 8% 6%);
+      transform: scale(1.04);
+      opacity: 0;
+    }
+  }
+  @media (min-width: 64rem) {
+    .shop[data-photo] {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      align-items: center;
+      column-gap: clamp(2.5rem, 5vw, 5rem);
+    }
+    .shop[data-photo] h1 {
+      font-size: clamp(2.875rem, 5.4vw, 5.25rem);
+    }
+    .shop .facts {
+      grid-column: 1 / -1;
+    }
+    .shop__photo {
+      order: 0;
+      aspect-ratio: 4 / 3;
+    }
+  }
+
+  /* a small picture of a thing, beside its name in a list */
+  .thumb {
+    display: block;
+    width: 3.5rem;
+    aspect-ratio: 1;
+    overflow: clip;
+    border-radius: var(--r-face);
+    background: var(--night-3);
+  }
+  .thumb img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  /* one shelf: its name on the left, what is on it on the right */
+  .shelf {
+    display: grid;
+    gap: 0.5rem;
+    padding-block: 1.5rem;
+    border-top: 1px solid var(--line);
+  }
+  .shelf h3 {
+    font-size: var(--t-h3);
+    color: var(--ink-2);
+  }
+  .shelf li {
+    display: grid;
+    grid-template-columns: 3.5rem minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 0.5rem 1rem;
+    padding-block: 0.75rem;
+  }
+  .shelf li + li {
+    border-top: 1px solid var(--line);
+  }
+  .shelf .thumb {
+    grid-row: 1 / span 2;
+    align-self: start;
+  }
+  .shelf__name {
+    grid-column: 2 / -1;
+    display: grid;
+    gap: 0.125rem;
+    font-size: 1.125rem;
+    line-height: 1.3;
+  }
+  .shelf__name .link {
+    justify-self: start;
+  }
+  .shelf__name small {
+    font-size: 0.9375rem;
+    color: var(--ink-3);
+  }
+  .shelf__price {
+    color: var(--amber-pale);
+  }
+  @media (min-width: 40rem) {
+    .shelf li {
+      grid-template-columns: 3.5rem minmax(0, 1fr) 6rem 11rem;
+      column-gap: 1.25rem;
+    }
+    .shelf .thumb {
+      grid-row: auto;
+      align-self: center;
+    }
+    .shelf__name {
+      grid-column: auto;
+    }
+    .shelf__price {
+      text-align: right;
+    }
+    .shelf li .btn {
+      justify-self: end;
+    }
+  }
+  @media (min-width: 64rem) {
+    .shelf {
+      grid-template-columns: 16rem minmax(0, 1fr);
+      gap: 2rem;
+    }
+    .shelf h3 {
+      padding-top: 0.75rem;
+    }
+  }
+
+  /* ---------- What people said ---------- */
+  .stars {
+    display: inline-flex;
+    gap: 0.125rem;
+    color: var(--amber);
+  }
+  .said {
+    display: grid;
+  }
+  .said li {
+    display: grid;
+    gap: 0.75rem;
+    padding-block: 1.5rem;
+    border-top: 1px solid var(--line);
+  }
+  .said__text {
+    max-width: 44rem;
+    font-weight: 300;
+    font-size: clamp(1.25rem, 2vw, 1.625rem);
+    line-height: 1.34;
+    letter-spacing: -0.012em;
+  }
+  .said__by {
+    font-size: 0.9375rem;
+    color: var(--ink-3);
+  }
+  .said__form {
+    margin-top: 2.5rem;
+  }
+
+  /* ---------- A medicine's own page ---------- */
+  .item {
+    display: grid;
+    gap: 2rem;
+    padding-top: clamp(1.5rem, 4vw, 3.5rem);
+  }
+  .item__photo {
+    aspect-ratio: 1;
+    overflow: clip;
+    border-radius: var(--r-face);
+    background: var(--night-3);
+  }
+  .item__photo img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .item__say {
+    display: grid;
+    align-content: center;
+    justify-items: start;
+    gap: 1rem;
+  }
+  .item h1 {
+    font-size: clamp(2.5rem, 5.2vw, 4.75rem);
+    line-height: 0.98;
+    letter-spacing: -0.035em;
+  }
+  .item__form {
+    color: var(--ink-2);
+  }
+  .item__about {
+    max-width: 34rem;
+    font-size: var(--t-lede);
+    line-height: 1.5;
+  }
+  .item__warn {
+    max-width: 34rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--line);
+    color: var(--ink-2);
+  }
+  .item__warn strong {
+    font-weight: 500;
+    color: var(--amber-pale);
+  }
+  .item__sample {
+    max-width: 34rem;
+    font-size: 0.9375rem;
+    color: var(--ink-3);
+  }
+  @media (min-width: 56rem) {
+    .item {
+      grid-template-columns: minmax(0, 0.8fr) minmax(0, 1fr);
+      gap: clamp(2.5rem, 6vw, 6rem);
+    }
+  }
+
+  /* who keeps a medicine: one pharmacy to a line */
+  .offers li {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 0.75rem 1rem;
+    padding-block: 1.25rem;
+    border-top: 1px solid var(--line);
+  }
+  .offers__shop {
+    display: grid;
+    gap: 0.25rem;
+    min-width: 0;
+  }
+  .offers h3 {
+    font-size: clamp(1.375rem, 2.4vw, 1.875rem);
+    font-weight: 300;
+    letter-spacing: -0.02em;
+    color: var(--ink-3);
+  }
+  .offers li[data-open] h3 {
+    color: var(--ink);
+  }
+  .offers h3 a {
+    text-decoration: none;
+  }
+  .offers h3 a:active {
+    opacity: 0.7;
+  }
+  .offers__shop p {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0 1rem;
+    font-size: 0.9375rem;
+    color: var(--ink-2);
+  }
+  .offers__shop .fig {
+    color: var(--ink-3);
+  }
+  .offers li[data-open] .offers__line {
+    color: var(--amber-pale);
+  }
+  .offers__price {
+    font-size: 1.0625rem;
+    color: var(--amber-pale);
+  }
+  .offers li .btn {
+    grid-column: 2 / -1;
+    justify-self: start;
+  }
+  @media (hover: hover) and (pointer: fine) {
+    .offers h3 a:hover {
+      color: var(--amber-pale);
+    }
+  }
+  @media (min-width: 48rem) {
+    .offers li {
+      grid-template-columns: auto minmax(0, 1fr) 6rem 11rem;
+      gap: 1.5rem;
+    }
+    .offers__price {
+      text-align: right;
+    }
+    .offers li .btn {
+      grid-column: auto;
+      justify-self: end;
+    }
+  }
+
+  /* ---------- The basket ---------- */
+  .basket {
+    display: grid;
+    gap: clamp(2.5rem, 6vw, 5rem);
+  }
+  .basket h2 {
+    margin-bottom: 1.5rem;
+    font-size: var(--t-h3);
+    font-weight: 400;
+    letter-spacing: -0.012em;
+    color: var(--ink-2);
+  }
+  .lines li {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 0.5rem 1.5rem;
+    padding-block: 1rem;
+    border-top: 1px solid var(--line);
+  }
+  .lines__name {
+    grid-column: 1 / -1;
+    display: grid;
+    gap: 0.125rem;
+    font-size: 1.125rem;
+    line-height: 1.3;
+  }
+  .lines__name .link {
+    justify-self: start;
+  }
+  .lines__name small {
+    font-size: 0.9375rem;
+    color: var(--ink-3);
+  }
+  .lines__price {
+    text-align: right;
+    color: var(--amber-pale);
+  }
+  /* with a small picture of each thing, as in the basket */
+  .lines--thumbs li {
+    grid-template-columns: 3.5rem minmax(0, 1fr) auto;
+    column-gap: 1rem;
+  }
+  .lines--thumbs .thumb {
+    grid-row: 1 / span 2;
+    align-self: start;
+  }
+  .lines--thumbs .lines__name {
+    grid-column: 2 / -1;
+  }
+  /* how many: one fewer, the number, one more */
+  .qty {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+  }
+  .qty .iconbtn {
+    border: 1px solid var(--edge);
+  }
+  .qty output {
+    min-width: 2rem;
+    text-align: center;
+    font-size: 1rem;
+  }
+  .sum {
+    display: grid;
+    gap: 0.5rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--edge);
+  }
+  .sum > div {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+    color: var(--ink-2);
+  }
+  .sum > div:last-child {
+    font-size: 1.375rem;
+    color: var(--ink);
+  }
+  .sum > div:last-child .fig {
+    color: var(--amber-pale);
+  }
+  .basket__more {
+    margin-top: 1rem;
+  }
+  .basket__ask {
+    display: grid;
+    justify-items: start;
+    gap: 1rem;
+    max-width: 30rem;
+  }
+  .basket__ask p {
+    color: var(--ink-2);
+  }
+  .basket__ask div {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+  @media (min-width: 40rem) {
+    .lines li {
+      grid-template-columns: minmax(0, 1fr) auto 6rem;
+    }
+    .lines__name {
+      grid-column: auto;
+    }
+    .lines--thumbs li {
+      grid-template-columns: 3.5rem minmax(0, 1fr) auto 6rem;
+    }
+    .lines--thumbs .thumb {
+      grid-row: auto;
+      align-self: center;
+    }
+    .lines--thumbs .lines__name {
+      grid-column: auto;
+    }
+  }
+  @media (min-width: 64rem) {
+    .basket {
+      grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+      align-items: start;
+    }
+  }
+
+  /* ---------- Orders: a list of them, and one ---------- */
+  .slips li {
+    position: relative;
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    align-items: baseline;
+    gap: 0.25rem 1rem;
+    padding-block: 1.25rem;
+    border-top: 1px solid var(--line);
+  }
+  .slips .lamp {
+    align-self: center;
+  }
+  .slips__what {
+    display: grid;
+    gap: 0.25rem;
+    min-width: 0;
+  }
+  .slips h2,
+  .slips h3 {
+    font-size: clamp(1.375rem, 2.4vw, 1.875rem);
+    font-weight: 300;
+    letter-spacing: -0.02em;
+  }
+  .slips a {
+    text-decoration: none;
+  }
+  .slips a::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+  }
+  .slips a:focus-visible {
+    outline: none;
+  }
+  .slips a:focus-visible::after {
+    outline: 2px solid var(--focus);
+    outline-offset: -2px;
+  }
+  .slips a:active {
+    opacity: 0.7;
+  }
+  .slips__what p,
+  .slips__end {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0 1rem;
+    font-size: 0.9375rem;
+    color: var(--ink-2);
+  }
+  .slips__end {
+    grid-column: 2;
+    color: var(--ink-3);
+  }
+  .slips li[data-live] .slips__state {
+    color: var(--amber-pale);
+  }
+  .slips__end .fig:last-child {
+    color: var(--ink-2);
+  }
+  @media (hover: hover) and (pointer: fine) {
+    .slips li:hover a {
+      color: var(--amber-pale);
+    }
+  }
+  @media (min-width: 48rem) {
+    .slips li {
+      grid-template-columns: auto minmax(0, 1fr) auto;
+      gap: 0 1.5rem;
+    }
+    .slips__end {
+      grid-column: 3;
+      display: grid;
+      justify-items: end;
+      gap: 0.25rem;
+    }
+  }
+
+  .order {
+    padding-top: clamp(1.5rem, 4vw, 3.5rem);
+  }
+  .order__ref {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0 1rem;
+    margin-bottom: 1.5rem;
+    color: var(--ink-2);
+  }
+  .order__ref .fig {
+    font-size: 1rem;
+    color: var(--amber-pale);
+  }
+  .order h1 {
+    font-size: var(--t-h1);
+    line-height: 0.96;
+    letter-spacing: -0.035em;
+  }
+  .order__say {
+    margin-top: 1.5rem;
+    max-width: 36rem;
+    font-size: var(--t-lede);
+    line-height: 1.5;
+    color: var(--ink-2);
+  }
+  .order__acts {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 2rem;
+  }
+  /* the way an order goes: a lamp for each step, lit once it has been reached */
+  .steps {
+    display: grid;
+    margin-top: clamp(2.5rem, 5vw, 4rem);
+  }
+  .steps li {
+    position: relative;
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 1rem;
+    padding-block: 1rem;
+    color: var(--ink-3);
+  }
+  .steps li[data-done] {
+    color: var(--ink);
+  }
+  /* the line from one lamp down to the next */
+  .steps li + li::before {
+    content: '';
+    position: absolute;
+    left: calc(var(--lamp) / 2 - 0.5px);
+    bottom: calc(50% + 0.5rem);
+    width: 1px;
+    height: calc(100% - 1rem);
+    background: var(--line);
+  }
+  .steps li[data-done] + li[data-done]::before {
+    background: var(--amber);
+  }
+  .steps .fig {
+    color: var(--ink-2);
+  }
+  @media (min-width: 48rem) {
+    .steps {
+      grid-auto-flow: column;
+      grid-auto-columns: minmax(0, 1fr);
+      padding-top: 0.5rem;
+    }
+    .steps li {
+      grid-template-columns: minmax(0, 1fr);
+      align-content: start;
+      justify-items: start;
+      gap: 0.75rem;
+      padding: 0 1rem 0 0;
+    }
+    .steps li + li::before {
+      left: calc(-100% + var(--lamp) + 0.75rem);
+      top: calc(var(--lamp) / 2);
+      bottom: auto;
+      width: calc(100% - var(--lamp) - 1.5rem);
+      height: 1px;
+    }
+  }
+  .order__parts {
+    display: grid;
+    gap: clamp(2.5rem, 6vw, 5rem);
+    margin-top: var(--air);
+  }
+  .order__parts h2 {
+    margin-bottom: 1.5rem;
+    font-size: var(--t-h3);
+    font-weight: 400;
+    letter-spacing: -0.012em;
+    color: var(--ink-2);
+  }
+  .order__parts .lines li {
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+  .order__parts .lines__name {
+    grid-column: auto;
+  }
+  .order__parts .facts {
+    grid-template-columns: minmax(0, 1fr);
+    margin-top: 0;
+  }
+  @media (min-width: 64rem) {
+    .order__parts {
+      grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+      align-items: start;
+    }
+  }
+
+  /* ---------- Signing in, and joining ---------- */
+  .door {
+    display: grid;
+    gap: clamp(3rem, 7vw, 6rem);
+  }
+  .door h2 {
+    margin-bottom: 1rem;
+    font-size: var(--t-h2);
+  }
+  .door__other {
+    margin-top: 1.5rem;
+    color: var(--ink-2);
+  }
+  .door__try > p {
+    max-width: 30rem;
+    color: var(--ink-2);
+  }
+  .door__try ul {
+    display: grid;
+    margin-top: 1.5rem;
+  }
+  .door__try li {
+    border-top: 1px solid var(--line);
+  }
+  .door__try button {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 0.25rem 1rem;
+    width: 100%;
+    padding-block: 1.25rem;
+    text-align: left;
+    cursor: pointer;
+  }
+  .door__try button strong {
+    font-weight: 300;
+    font-size: clamp(1.375rem, 2.4vw, 1.875rem);
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+  }
+  .door__try button small {
+    grid-column: 1;
+    font-size: 0.9375rem;
+    color: var(--ink-2);
+  }
+  .door__try button svg {
+    grid-row: 1 / span 2;
+    grid-column: 2;
+    color: var(--amber);
+    transition: transform 320ms var(--ease-out);
+  }
+  .door__try button:active {
+    opacity: 0.7;
+  }
+  .door__try button:disabled {
+    opacity: 0.5;
+    cursor: progress;
+  }
+  @media (hover: hover) and (pointer: fine) {
+    .door__try button:hover svg {
+      transform: translate3d(0.25rem, 0, 0);
+    }
+  }
+  @media (min-width: 64rem) {
+    .door {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      align-items: start;
+    }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tile__photo img,
+  .row__name,
+  .door__try button svg {
+    transition: none;
+  }
+  .tile:hover .tile__photo img,
+  .door__try button:hover svg {
+    transform: none;
+  }
+}

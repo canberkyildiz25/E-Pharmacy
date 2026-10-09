@@ -1,0 +1,416 @@
+/* The front page, read from the top: the street at night, who is open now,
+   what is on the shelves, how the watch works, and the way behind the counter. */
+
+@layer components {
+  /* ---------- The cover ---------- */
+  .cover {
+    position: relative;
+    isolation: isolate;
+    display: grid;
+    align-items: end;
+    min-height: 100svh;
+    /* the masthead lies over the film */
+    margin-top: calc(var(--mast) * -1);
+    padding-top: calc(var(--mast) + 1.5rem);
+    overflow: clip;
+    background: var(--night);
+  }
+  .cover__film {
+    position: absolute;
+    inset: 0;
+    z-index: -2;
+  }
+  .cover__film img,
+  .cover__film video {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 50% 60%;
+  }
+  .cover__film video {
+    opacity: 0;
+    transition: opacity 900ms ease;
+  }
+  .cover[data-film='playing'] .cover__film video {
+    opacity: 1;
+  }
+  /* the night is deepened where the lettering stands, and the foot runs into the page below */
+  .cover::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background:
+      linear-gradient(90deg, color-mix(in oklab, var(--night) 72%, transparent) 0%, color-mix(in oklab, var(--night) 34%, transparent) 38%, transparent 66%),
+      linear-gradient(0deg, var(--night) 0%, color-mix(in oklab, var(--night) 62%, transparent) 16%, transparent 46%),
+      linear-gradient(180deg, color-mix(in oklab, var(--night) 60%, transparent) 0%, transparent 22%);
+  }
+  .cover__in {
+    display: grid;
+    gap: clamp(1.25rem, 2.2vw, 2rem);
+    padding-bottom: clamp(2.5rem, 6vw, 5rem);
+  }
+  .cover__title {
+    font-size: var(--t-mega);
+    line-height: 0.88;
+    letter-spacing: -0.045em;
+  }
+  /* each line is a slot its words come up into */
+  .cover__line {
+    display: block;
+    overflow: clip;
+    margin-bottom: -0.08em;
+    padding-bottom: 0.12em;
+  }
+  .cover__line > span {
+    display: block;
+  }
+  .cover__lede {
+    max-width: 29rem;
+    font-size: var(--t-lede);
+    line-height: 1.5;
+  }
+  .cover__acts {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.75rem 1rem;
+    margin-top: 0.5rem;
+  }
+  .cover__ctl {
+    position: absolute;
+    right: var(--gutter);
+    top: calc(var(--mast) + 0.5rem);
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.75rem;
+    font-size: 0.8125rem;
+    letter-spacing: 0.02em;
+    color: var(--ink-2);
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.3em;
+    cursor: pointer;
+  }
+  .cover__ctl:active {
+    opacity: 0.65;
+  }
+  html.live .cover__line > span {
+    animation: cover-line 1400ms var(--ease-slow) both;
+  }
+  html.live .cover__line:nth-child(1) > span {
+    animation-delay: 240ms;
+  }
+  html.live .cover__line:nth-child(2) > span {
+    animation-delay: 360ms;
+  }
+  html.live .cover__lede,
+  html.live .cover__acts {
+    animation: cover-rise 1200ms var(--ease-slow) 800ms both;
+  }
+  html.live .cover__acts {
+    animation-delay: 920ms;
+  }
+  @keyframes cover-line {
+    from {
+      transform: translate3d(0, 110%, 0);
+    }
+  }
+  @keyframes cover-rise {
+    from {
+      opacity: 0;
+      transform: translate3d(0, 1.25rem, 0);
+    }
+  }
+  /* as the page moves on, the street falls behind */
+  @supports (animation-timeline: view()) {
+    html.live .cover__film {
+      animation: cover-film-away linear both;
+      animation-timeline: view();
+      animation-range: exit 0% exit 100%;
+    }
+    @keyframes cover-film-away {
+      to {
+        transform: translate3d(0, 22%, 0);
+      }
+    }
+  }
+  @media (max-aspect-ratio: 3/4) {
+    .cover__film img,
+    .cover__film video {
+      object-position: 50% 50%;
+    }
+    .cover::before {
+      background:
+        linear-gradient(0deg, var(--night) 0%, color-mix(in oklab, var(--night) 78%, transparent) 30%, transparent 62%),
+        linear-gradient(180deg, color-mix(in oklab, var(--night) 60%, transparent) 0%, transparent 20%);
+    }
+    .cover__title {
+      font-size: clamp(3.5rem, 17vw, 6.5rem);
+    }
+  }
+
+  /* ---------- Open now ---------- */
+  .open {
+    padding-top: clamp(3.5rem, 8vw, 7rem);
+  }
+  .open__head {
+    display: grid;
+    gap: 1.25rem;
+    margin-bottom: clamp(2rem, 4vw, 3.5rem);
+  }
+  .open__head h2 {
+    font-size: var(--t-h1);
+    letter-spacing: -0.035em;
+  }
+  .open__sum {
+    max-width: 38rem;
+    font-size: var(--t-lede);
+    line-height: 1.5;
+    color: var(--ink-2);
+  }
+  .open__sum .fig {
+    color: var(--amber-pale);
+  }
+  .open__all {
+    margin-top: 2rem;
+  }
+
+  /* ---------- What is on the shelves ---------- */
+  .needs {
+    margin-top: var(--air);
+    padding-block: var(--air);
+    background: var(--night-2);
+  }
+  .needs__head {
+    display: grid;
+    gap: 1.75rem;
+    margin-bottom: clamp(2.5rem, 5vw, 4rem);
+  }
+  .needs__head h2 {
+    font-size: var(--t-h2);
+  }
+  .needs__search {
+    position: relative;
+    max-width: 34rem;
+  }
+  .needs__search .input {
+    padding-right: 3.5rem;
+    background: var(--night);
+  }
+  .needs__go {
+    position: absolute;
+    right: 0.25rem;
+    top: 0.25rem;
+    color: var(--amber-pale);
+  }
+  .needs__shelves {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  .needs__all {
+    margin-top: 2rem;
+  }
+  /* a row to push sideways, with the next thing showing at the edge */
+  .rail {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: min(62%, 17rem);
+    gap: 1.25rem;
+    margin-inline: calc(var(--gutter) * -1);
+    padding-inline: var(--gutter);
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x mandatory;
+    scroll-padding-inline: var(--gutter);
+    scrollbar-width: none;
+  }
+  .rail > * {
+    scroll-snap-align: start;
+  }
+  @media (min-width: 64rem) {
+    .needs__head {
+      grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+      align-items: end;
+      gap: 1.75rem calc(100% / 12);
+    }
+    .needs__head h2 {
+      grid-row: span 2;
+      align-self: start;
+    }
+    .rail {
+      grid-auto-flow: row;
+      grid-template-columns: repeat(6, minmax(0, 1fr));
+      margin-inline: 0;
+      padding-inline: 0;
+      overflow: visible;
+    }
+  }
+
+  /* ---------- How the watch works ---------- */
+  .watch {
+    position: relative;
+    isolation: isolate;
+    display: grid;
+    align-items: end;
+    min-height: min(100svh, 52rem);
+    overflow: clip;
+  }
+  .watch__film {
+    position: absolute;
+    inset: 0;
+    z-index: -2;
+  }
+  .watch__film img,
+  .watch__film video {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .watch::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background:
+      linear-gradient(0deg, var(--night) 0%, color-mix(in oklab, var(--night) 50%, transparent) 40%, transparent 70%),
+      linear-gradient(180deg, var(--night-2) 0%, transparent 24%);
+  }
+  .watch__in {
+    display: grid;
+    gap: 1.75rem;
+    padding-block: var(--air) clamp(3rem, 6vw, 5rem);
+  }
+  .watch h2 {
+    font-size: var(--t-h2);
+  }
+  .watch__say {
+    max-width: 36rem;
+    font-size: var(--t-lede);
+    line-height: 1.55;
+  }
+  /* the rain can be stopped, like the street */
+  .watch__ctl {
+    display: inline-flex;
+    align-items: center;
+    justify-self: start;
+    min-height: 2.75rem;
+    font-size: 0.8125rem;
+    letter-spacing: 0.02em;
+    color: var(--ink-2);
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.3em;
+    cursor: pointer;
+  }
+  .watch__ctl:active {
+    opacity: 0.65;
+  }
+  /* a day from nine to nine */
+  .band {
+    display: grid;
+    gap: 0.75rem;
+    max-width: 52rem;
+    margin-top: 1rem;
+  }
+  .band__bar {
+    position: relative;
+    display: grid;
+    grid-template-columns: 10fr 14fr;
+    height: 0.25rem;
+  }
+  .band__day {
+    background: var(--edge);
+  }
+  .band__night {
+    background: var(--amber);
+    box-shadow: 0 0 1.25rem var(--glow);
+  }
+  .band__now {
+    position: absolute;
+    top: 50%;
+    width: 1rem;
+    height: 1rem;
+    margin: -0.5rem 0 0 -0.5rem;
+    border: 2px solid var(--night);
+    border-radius: 50%;
+    background: var(--ink);
+  }
+  .band__marks,
+  .band__names {
+    display: grid;
+    grid-template-columns: 10fr 14fr;
+    color: var(--ink-2);
+  }
+  .band__marks {
+    grid-template-columns: 10fr 14fr auto;
+  }
+  .band__marks span:last-child {
+    margin-left: -3em;
+  }
+  .band__names {
+    font-size: 0.9375rem;
+  }
+  .band__names span:last-child {
+    color: var(--amber-pale);
+  }
+
+  /* ---------- Behind the counter ---------- */
+  .behind {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    align-items: center;
+    gap: clamp(2.5rem, 6vw, 5rem);
+    padding-top: var(--air);
+  }
+  .behind__photo {
+    aspect-ratio: 16 / 9;
+    overflow: clip;
+    border-radius: var(--r-face);
+    background: var(--night-2);
+  }
+  .behind__photo img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    /* the sign over the shelves has no real words on it: it is left out of the frame */
+    object-position: 50% 100%;
+  }
+  .behind__say {
+    display: grid;
+    gap: 1.5rem;
+  }
+  .behind__say h2 {
+    font-size: var(--t-h2);
+  }
+  .behind__say > p:not(.behind__acts) {
+    max-width: 32rem;
+    font-size: var(--t-lede);
+    line-height: 1.55;
+    color: var(--ink-2);
+  }
+  .behind__acts {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem 2rem;
+    margin-top: 0.5rem;
+  }
+  @media (min-width: 64rem) {
+    .behind {
+      grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+    }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cover__film video {
+    transition: none;
+  }
+}

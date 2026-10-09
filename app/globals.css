@@ -1,0 +1,798 @@
+@import 'tailwindcss';
+
+@import './styles/chrome.css';
+@import './styles/home.css';
+@import './styles/shop.css';
+@import './styles/panel.css';
+@import './styles/pages.css';
+
+/* Nobet is the night watch: a street after dark, and the one shop with its
+   light on. The ground is the blue-black of the night in the film, and there
+   is one colour, the amber of a street lamp. Whatever is amber is lit: open,
+   chosen, or the thing to press. The rules are in design.md. */
+
+/* Neither family draws the lira sign. Left to itself the browser borrows one
+   from the stand-in it sizes to match each family, so the sign came out a
+   third too large beside the figures. This names a face for that one
+   character alone, at its own size. */
+@font-face {
+  font-family: 'Lira';
+  src: local('Segoe UI'), local('Helvetica Neue'), local('Roboto'), local('Noto Sans'), local('DejaVu Sans'), local('Arial');
+  unicode-range: U+20BA;
+}
+
+@theme static {
+  --font-sans: 'Lira', var(--font-jost), 'Century Gothic', system-ui, sans-serif;
+  --font-mono: 'Lira', var(--font-dm-mono), ui-monospace, 'Cascadia Mono', monospace;
+
+  /* a control answering a hand */
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  /* something arriving: quick to start, a long time settling */
+  --ease-slow: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+:root {
+  /* measured from the film: its night, its lamp, its brightest window */
+  --night: oklch(13.8% 0.053 270);
+  --night-2: oklch(21.3% 0.025 291);
+  --amber: oklch(64.2% 0.141 64);
+  --amber-pale: oklch(81.5% 0.1 81);
+  --ink: oklch(97.2% 0.016 95);
+
+  /* drawn from those */
+  --night-3: oklch(26% 0.028 288);
+  --ink-2: oklch(77% 0.022 275);
+  --ink-3: oklch(62% 0.026 275);
+  --line: oklch(27% 0.035 278);
+  /* the edge of a control: 3 to 1 against the night */
+  --edge: oklch(50% 0.032 278);
+  /* lettering on a lit control */
+  --on-amber: oklch(13.8% 0.053 270);
+  /* something that went wrong: the only other colour, and only for that */
+  --wrong: oklch(74% 0.15 28);
+  --veil: oklch(8% 0.04 270 / 0.72);
+  --glow: oklch(64.2% 0.141 64 / 0.34);
+  --shadow: 0 1px 2px oklch(5% 0.03 270 / 0.5), 0 30px 70px -30px oklch(5% 0.03 270 / 0.9);
+
+  --focus: var(--amber-pale);
+  /* one rule for corners: a control is a capsule, a surface is barely rounded */
+  --r-pill: 62.5rem;
+  --r-face: 0.375rem;
+  --gutter: clamp(1.25rem, 4vw, 4rem);
+  --page: 96rem;
+  --mast: 4.5rem;
+  /* how wide the lamp is: the line between two of them is measured from it */
+  --lamp: 0.625rem;
+
+  --t-mega: clamp(3.75rem, min(11.5vw, 21svh), 13.5rem);
+  --t-h1: clamp(2.875rem, 6.4vw, 6rem);
+  --t-h2: clamp(2.125rem, 3.8vw, 3.5rem);
+  --t-h3: 1.5rem;
+  --t-lede: clamp(1.125rem, 1.35vw, 1.3125rem);
+  /* the dark between one part of a page and the next */
+  --air: clamp(5rem, 11vw, 10.5rem);
+
+  color-scheme: dark;
+}
+
+@layer base {
+  html {
+    overflow-x: clip;
+    scroll-padding-top: calc(var(--mast) + 1.5rem);
+    scrollbar-gutter: stable;
+    background: var(--night);
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+  }
+  /* the wheel is given its weight by a script: the browser's own easing would fight it */
+  html.lenis,
+  html.lenis body {
+    height: auto;
+  }
+  html.lenis.lenis-smooth {
+    scroll-behavior: auto !important;
+  }
+  html.lenis.lenis-stopped {
+    overflow: clip;
+  }
+  /* a dialog is open: the page behind it stays where it is */
+  html:has(dialog[open]) {
+    overflow: hidden;
+  }
+  body {
+    overflow-x: clip;
+    min-height: 100svh;
+    background: var(--night);
+    color: var(--ink);
+    font-family: var(--font-sans);
+    font-size: 1.0625rem;
+    line-height: 1.6;
+    font-synthesis: none;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+  }
+  /* Headings are light and large: a title card, not a shout. */
+  h1,
+  h2,
+  h3 {
+    font-style: normal;
+    font-weight: 300;
+    line-height: 1;
+    letter-spacing: -0.028em;
+    text-wrap: balance;
+    overflow-wrap: anywhere;
+    min-width: 0;
+  }
+  h3 {
+    font-weight: 400;
+    line-height: 1.12;
+    letter-spacing: -0.012em;
+  }
+  p {
+    text-wrap: pretty;
+  }
+  a {
+    color: inherit;
+  }
+  ::selection {
+    background: var(--amber);
+    color: var(--on-amber);
+  }
+  :focus-visible {
+    outline: 2px solid var(--focus);
+    outline-offset: 3px;
+    border-radius: 0.25rem;
+  }
+  dialog {
+    color: inherit;
+  }
+}
+
+@layer components {
+  .wrap {
+    width: 100%;
+    max-width: var(--page);
+    margin-inline: auto;
+    padding-inline: var(--gutter);
+  }
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+  .skip-link {
+    position: absolute;
+    left: 1rem;
+    top: -4rem;
+    z-index: 60;
+    padding: 0.75rem 1.25rem;
+    border-radius: var(--r-pill);
+    background: var(--amber);
+    color: var(--on-amber);
+    font-weight: 500;
+  }
+  .skip-link:focus-visible {
+    top: 1rem;
+  }
+
+  /* ---------- Figures: a time, a distance, a price, a reference ---------- */
+  .fig {
+    font-family: var(--font-mono);
+    font-size: 0.875em;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 0.01em;
+  }
+  /* the name of a fact, beside the fact */
+  .label {
+    font-weight: 500;
+    font-size: 0.75rem;
+    line-height: 1.3;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+  }
+  .link {
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.24em;
+    text-decoration-color: var(--edge);
+    transition: text-decoration-color 160ms ease;
+  }
+  @media (hover: hover) and (pointer: fine) {
+    .link:hover {
+      text-decoration-color: var(--amber);
+    }
+  }
+  .link:active {
+    opacity: 0.7;
+  }
+  /* A link that stands by itself in a list, not inside a sentence, is given
+     the reach of a finger. The padding is taken back by the margin, so
+     nothing around it moves. */
+  .shelf__name .link,
+  .lines__name .link,
+  .stock__name .link,
+  .order__ref .link,
+  .bars .link,
+  .ledger tbody th .link,
+  .offers h3 a,
+  .ticket__head h3 a {
+    display: inline-block;
+    padding-block: 0.75rem;
+    margin-block: -0.75rem;
+  }
+  /* the way on from here: words, and an arrow that leans forward */
+  .more {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    min-height: 2.75rem;
+    font-weight: 500;
+    white-space: nowrap;
+    text-decoration: none;
+  }
+  .more svg {
+    flex: none;
+    color: var(--amber);
+    transition: transform 320ms var(--ease-out);
+  }
+  @media (hover: hover) and (pointer: fine) {
+    .more:hover svg {
+      transform: translate3d(0.25rem, 0, 0);
+    }
+  }
+  .more:active {
+    opacity: 0.7;
+  }
+
+  /* ---------- The lamp: lit when a pharmacy is open, dark when it is not ---------- */
+  .lamp {
+    flex: none;
+    width: var(--lamp);
+    height: var(--lamp);
+    border: 1px solid var(--edge);
+    border-radius: 50%;
+  }
+  .lamp[data-lit] {
+    border-color: var(--amber);
+    background: var(--amber);
+    box-shadow: 0 0 0.875rem 0.125rem var(--glow);
+  }
+
+  /* ---------- Buttons: capsules ---------- */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    min-height: 3.25rem;
+    padding: 0 1.75rem;
+    border: 1px solid var(--amber);
+    border-radius: var(--r-pill);
+    background: var(--amber);
+    color: var(--on-amber);
+    font-weight: 500;
+    font-size: 1rem;
+    line-height: 1;
+    white-space: nowrap;
+    text-decoration: none;
+    cursor: pointer;
+    transition:
+      transform 160ms var(--ease-out),
+      background-color 200ms ease,
+      border-color 200ms ease,
+      color 200ms ease;
+  }
+  .btn:active {
+    transform: scale(0.98);
+  }
+  .btn[disabled],
+  .btn[aria-disabled='true'] {
+    opacity: 0.45;
+    cursor: not-allowed;
+    transform: none;
+  }
+  .btn--line {
+    border-color: var(--edge);
+    background: transparent;
+    color: var(--ink);
+  }
+  .btn--quiet {
+    border-color: transparent;
+    background: transparent;
+    color: var(--ink);
+    padding-inline: 1rem;
+  }
+  .btn--small {
+    min-height: 2.75rem;
+    padding-inline: 1.25rem;
+    font-size: 0.9375rem;
+  }
+  @media (hover: hover) and (pointer: fine) {
+    .btn:not(.btn--line, .btn--quiet, [disabled]):hover {
+      border-color: var(--amber-pale);
+      background: var(--amber-pale);
+    }
+    .btn--line:not([disabled]):hover {
+      border-color: var(--amber);
+    }
+    .btn--quiet:not([disabled]):hover {
+      background: var(--night-2);
+    }
+  }
+  .btn[data-busy] {
+    cursor: progress;
+  }
+  .btn[data-busy]::before {
+    content: '';
+    width: 1rem;
+    height: 1rem;
+    border: 2px solid currentColor;
+    border-right-color: transparent;
+    border-radius: 50%;
+    animation: turn 700ms linear infinite;
+  }
+  @keyframes turn {
+    to {
+      transform: rotate(1turn);
+    }
+  }
+  .iconbtn {
+    display: inline-grid;
+    place-items: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    border-radius: 50%;
+    color: inherit;
+    cursor: pointer;
+    transition:
+      transform 160ms var(--ease-out),
+      background-color 160ms ease;
+  }
+  .iconbtn:active {
+    transform: scale(0.94);
+  }
+  .iconbtn:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+  }
+  @media (hover: hover) and (pointer: fine) {
+    .iconbtn:hover {
+      background: var(--night-2);
+    }
+  }
+
+  /* ---------- Fields ---------- */
+  .field {
+    display: grid;
+    gap: 0.5rem;
+    min-width: 0;
+  }
+  .field > label,
+  fieldset.field > legend {
+    font-weight: 500;
+    font-size: 0.9375rem;
+    line-height: 1.3;
+  }
+  fieldset.field > legend {
+    margin-bottom: 0.5rem;
+    padding: 0;
+  }
+  .field__hint {
+    font-size: 0.9375rem;
+    line-height: 1.45;
+    color: var(--ink-2);
+  }
+  .field__opt {
+    font-weight: 400;
+    color: var(--ink-3);
+  }
+  .input {
+    width: 100%;
+    min-height: 3.25rem;
+    padding: 0.75rem 1.25rem;
+    border: 1px solid var(--edge);
+    border-radius: 1.625rem;
+    background: var(--night-2);
+    color: var(--ink);
+    font: inherit;
+    line-height: 1.4;
+    outline: 2px solid transparent;
+    outline-offset: 1px;
+    transition: border-color 160ms ease;
+  }
+  textarea.input {
+    min-height: 7.5rem;
+    resize: vertical;
+  }
+  select.input {
+    appearance: none;
+    padding-right: 2.75rem;
+    background-image:
+      linear-gradient(45deg, transparent 50%, currentColor 50%),
+      linear-gradient(135deg, currentColor 50%, transparent 50%);
+    background-position:
+      calc(100% - 1.5rem) 55%,
+      calc(100% - 1.1875rem) 55%;
+    background-size: 0.3125rem 0.3125rem;
+    background-repeat: no-repeat;
+  }
+  select.input option {
+    background: var(--night-2);
+    color: var(--ink);
+  }
+  .input::placeholder {
+    color: var(--ink-3);
+  }
+  .input:focus-visible {
+    outline-color: var(--focus);
+    border-color: var(--amber);
+  }
+  .input[aria-invalid='true'] {
+    border-color: var(--wrong);
+  }
+  .input:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+  @media (hover: hover) and (pointer: fine) {
+    .input:not(:disabled, :focus-visible):hover {
+      border-color: var(--ink-3);
+    }
+  }
+  /* The line under a control where a problem is said. It keeps its height
+     when it is empty, so that a problem appearing does not push the form down. */
+  .field__slot {
+    min-height: 1.375rem;
+  }
+  .field__error {
+    display: flex;
+    gap: 0.5rem;
+    align-items: flex-start;
+    font-size: 0.9375rem;
+    line-height: 1.4;
+    font-weight: 500;
+    color: var(--wrong);
+  }
+  .field__error svg {
+    flex: none;
+    margin-top: 0.125rem;
+  }
+  /* one of a few: capsules, and the chosen one is lit */
+  .choices {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  .choice {
+    position: relative;
+    display: inline-flex;
+  }
+  .choice input {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    opacity: 0;
+    cursor: pointer;
+  }
+  .choice span {
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.75rem;
+    padding-inline: 1.25rem;
+    border: 1px solid var(--edge);
+    border-radius: var(--r-pill);
+    font-weight: 500;
+    font-size: 0.9375rem;
+    white-space: nowrap;
+    transition:
+      transform 160ms var(--ease-out),
+      background-color 160ms ease,
+      border-color 160ms ease,
+      color 160ms ease;
+  }
+  .choice input:checked + span {
+    border-color: var(--amber);
+    background: var(--amber);
+    color: var(--on-amber);
+  }
+  .choice input:focus-visible + span {
+    outline: 2px solid var(--focus);
+    outline-offset: 3px;
+  }
+  .choice input:disabled + span {
+    opacity: 0.45;
+    cursor: not-allowed;
+  }
+  .choice input:active + span {
+    transform: scale(0.97);
+  }
+  @media (hover: hover) and (pointer: fine) {
+    .choice input:not(:checked, :disabled):hover + span {
+      border-color: var(--amber);
+    }
+  }
+  .form {
+    display: grid;
+    gap: 0.5rem;
+    max-width: 38rem;
+  }
+  .form__row {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0.5rem 1rem;
+  }
+  @media (min-width: 36rem) {
+    .form__row {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+  .form__acts {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.75rem;
+    padding-top: 0.5rem;
+  }
+  .form__note {
+    max-width: 34rem;
+    color: var(--ink-2);
+  }
+  .refused {
+    display: flex;
+    gap: 0.75rem;
+    align-items: flex-start;
+    margin-bottom: 1rem;
+    padding: 1rem 1.25rem;
+    border: 1px solid var(--wrong);
+    border-radius: var(--r-face);
+    font-weight: 500;
+  }
+  .refused svg {
+    flex: none;
+    margin-top: 0.25rem;
+    color: var(--wrong);
+  }
+
+  /* ---------- A dialog: a small form over the page ---------- */
+  .modal {
+    width: min(100% - 2rem, 32rem);
+    max-height: min(100dvh - 2rem, 44rem);
+    margin: auto;
+    padding: 0;
+    border: 1px solid var(--line);
+    border-radius: var(--r-face);
+    background: var(--night-2);
+    color: var(--ink);
+    box-shadow: var(--shadow);
+    opacity: 0;
+    transform: translate3d(0, 0.5rem, 0) scale(0.98);
+    transition:
+      opacity 180ms var(--ease-out),
+      transform 180ms var(--ease-out),
+      overlay 180ms allow-discrete,
+      display 180ms allow-discrete;
+  }
+  .modal[open] {
+    opacity: 1;
+    transform: none;
+  }
+  @starting-style {
+    .modal[open] {
+      opacity: 0;
+      transform: translate3d(0, 0.5rem, 0) scale(0.98);
+    }
+  }
+  .modal::backdrop {
+    background: var(--veil);
+    opacity: 0;
+    transition:
+      opacity 180ms ease,
+      overlay 180ms allow-discrete,
+      display 180ms allow-discrete;
+  }
+  .modal[open]::backdrop {
+    opacity: 1;
+  }
+  @starting-style {
+    .modal[open]::backdrop {
+      opacity: 0;
+    }
+  }
+  .modal__in {
+    display: grid;
+    gap: 1.5rem;
+    padding: 1.75rem;
+  }
+  .modal__top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+  .modal h2 {
+    font-size: 2rem;
+    font-weight: 400;
+    line-height: 1.04;
+    letter-spacing: -0.02em;
+  }
+  .modal__top .iconbtn {
+    flex: none;
+    margin: -0.5rem -0.5rem 0 0;
+  }
+  .modal .input {
+    background: var(--night);
+  }
+
+  /* ---------- Messages at the foot of the screen ---------- */
+  .toasts {
+    position: fixed;
+    left: 50%;
+    bottom: max(1rem, env(safe-area-inset-bottom));
+    z-index: 70;
+    display: grid;
+    gap: 0.5rem;
+    width: min(100% - 2rem, 28rem);
+    transform: translateX(-50%);
+    pointer-events: none;
+  }
+  .toast {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    min-height: 3.25rem;
+    padding: 0.5rem 0.5rem 0.5rem 1.5rem;
+    border-radius: var(--r-pill);
+    background: var(--ink);
+    color: var(--night);
+    font-weight: 500;
+    line-height: 1.35;
+    box-shadow: var(--shadow);
+    pointer-events: auto;
+    transition:
+      opacity 220ms var(--ease-out),
+      transform 220ms var(--ease-out);
+  }
+  @starting-style {
+    .toast {
+      opacity: 0;
+      transform: translate3d(0, 100%, 0);
+    }
+  }
+  .toast__undo {
+    flex: none;
+    min-height: 2.75rem;
+    padding-inline: 1.25rem;
+    border: 1px solid color-mix(in oklab, var(--night) 40%, transparent);
+    border-radius: var(--r-pill);
+    font-weight: 500;
+    cursor: pointer;
+  }
+  .toast__undo:active {
+    transform: scale(0.97);
+  }
+
+  /* ---------- Pages below the masthead ---------- */
+  .page-head {
+    padding-block: clamp(3.5rem, 9vw, 8rem) clamp(2.5rem, 5vw, 4rem);
+  }
+  .page-head h1 {
+    font-size: var(--t-h1);
+    line-height: 0.96;
+    letter-spacing: -0.035em;
+  }
+  .page-head p {
+    margin-top: 1.5rem;
+    max-width: 36rem;
+    font-size: var(--t-lede);
+    line-height: 1.5;
+    color: var(--ink-2);
+  }
+  .crumb {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    min-height: 2.75rem;
+    margin-top: clamp(1.5rem, 3vw, 2.5rem);
+    font-weight: 500;
+    font-size: 0.9375rem;
+    color: var(--ink-2);
+    white-space: nowrap;
+    text-decoration: none;
+  }
+  .crumb svg {
+    transition: transform 320ms var(--ease-out);
+  }
+  @media (hover: hover) and (pointer: fine) {
+    .crumb:hover svg {
+      transform: translate3d(-0.25rem, 0, 0);
+    }
+  }
+  .crumb:active {
+    opacity: 0.7;
+  }
+  /* the foot brings its own dark with it: a page needs only a little of its own */
+  .page-foot {
+    height: clamp(1rem, 3vw, 2.5rem);
+  }
+  .empty {
+    display: grid;
+    gap: 1rem;
+    justify-items: start;
+    max-width: 36rem;
+    padding-block: clamp(2rem, 6vw, 4rem);
+  }
+  .empty h2 {
+    font-size: var(--t-h2);
+  }
+  .empty p {
+    color: var(--ink-2);
+  }
+
+  /* ---------- Arriving: once, as a thing comes into view ---------- */
+  html.live [data-in] {
+    opacity: 0;
+    transform: translate3d(0, 1.5rem, 0);
+    transition:
+      opacity 1000ms var(--ease-slow),
+      transform 1000ms var(--ease-slow);
+    transition-delay: calc(var(--i, 0) * 80ms);
+  }
+  html.live [data-in].is-in {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Going from one page to another: the old one fades as the new one arrives.
+   It is kept short, because the new page cannot be pressed until it has. */
+::view-transition-group(*) {
+  animation-duration: 360ms;
+  animation-timing-function: var(--ease-slow);
+}
+::view-transition-old(*),
+::view-transition-new(*) {
+  animation-duration: 260ms;
+  animation-timing-function: ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none !important;
+  }
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    scroll-behavior: auto !important;
+  }
+  .btn:active,
+  .iconbtn:active,
+  .choice input:active + span,
+  .toast__undo:active {
+    transform: none;
+  }
+  .more svg,
+  .crumb svg,
+  .modal,
+  .toast {
+    transition: none;
+  }
+  .modal,
+  .modal[open],
+  .toast {
+    transform: none;
+  }
+  .btn[data-busy]::before {
+    border-right-color: currentColor;
+    opacity: 0.5;
+  }
+}

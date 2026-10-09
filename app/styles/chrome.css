@@ -1,0 +1,302 @@
+/* What is on every page: the masthead, the menu it opens on a small screen,
+   and the foot. */
+
+@layer components {
+  .wordmark {
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.75rem;
+    font-weight: 500;
+    font-size: 1.125rem;
+    line-height: 1;
+    letter-spacing: 0.34em;
+    /* the tracking leaves a gap after the last letter: take it back */
+    margin-right: -0.34em;
+    text-transform: uppercase;
+    text-decoration: none;
+  }
+  .wordmark:active {
+    opacity: 0.7;
+  }
+
+  /* ---------- The masthead ---------- */
+  /* a marker at the head of the page: while any of it is in view, the masthead is lettering only */
+  .mast-top {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 1px;
+    height: 1px;
+    pointer-events: none;
+  }
+  /* on the front page it is as tall as the film, less the masthead itself */
+  body:has(.cover) .mast-top {
+    height: calc(100svh - var(--mast));
+  }
+  .mast {
+    position: sticky;
+    top: 0;
+    z-index: 40;
+    height: var(--mast);
+    transition:
+      background-color 420ms ease,
+      box-shadow 420ms ease;
+  }
+  .mast[data-raised] {
+    background: var(--night);
+    box-shadow: 0 1px 0 var(--line);
+  }
+  .mast__in {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+    height: 100%;
+  }
+  .mast__ways {
+    display: none;
+    align-items: center;
+    gap: clamp(1.5rem, 2.6vw, 2.75rem);
+    margin-left: auto;
+  }
+  .mast__ways a {
+    display: inline-flex;
+    align-items: center;
+    min-width: 2.75rem;
+    min-height: 2.75rem;
+    font-size: 0.9375rem;
+    white-space: nowrap;
+    text-decoration: none;
+  }
+  /* a rule is drawn under a link from its first letter, in lamp light */
+  .mast__ways a > span,
+  .foot__ways a > span {
+    padding-block: 0.25rem;
+    background: linear-gradient(var(--amber), var(--amber)) 0 100% / 0 1px no-repeat;
+    transition: background-size 380ms var(--ease-out);
+  }
+  .mast__ways a[aria-current='page'] > span {
+    background-size: 100% 1px;
+  }
+  @media (hover: hover) and (pointer: fine) {
+    .mast__ways a:hover > span,
+    .foot__ways a:hover > span {
+      background-size: 100% 1px;
+    }
+  }
+  .mast__ways a:active,
+  .mast__menu:active,
+  .mast__basket:active {
+    opacity: 0.65;
+  }
+  .mast__end {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .mast__basket {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    min-width: 2.75rem;
+    min-height: 2.75rem;
+    text-decoration: none;
+  }
+  .mast__basket .fig {
+    color: var(--amber-pale);
+  }
+  .mast__menu {
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.75rem;
+    padding-inline: 0.25rem;
+    font-size: 0.9375rem;
+    cursor: pointer;
+  }
+  @media (min-width: 56rem) {
+    .mast__ways {
+      display: flex;
+    }
+    .mast__end .mast__menu {
+      display: none;
+    }
+  }
+
+  /* ---------- The menu: the same ways in, at full size, on a small screen ---------- */
+  .sheet {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    max-width: none;
+    height: 100%;
+    max-height: none;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    background: var(--night);
+    color: var(--ink);
+    opacity: 0;
+    transition:
+      opacity 280ms var(--ease-out),
+      overlay 280ms allow-discrete,
+      display 280ms allow-discrete;
+  }
+  .sheet[open] {
+    opacity: 1;
+  }
+  @starting-style {
+    .sheet[open] {
+      opacity: 0;
+    }
+  }
+  .sheet::backdrop {
+    background: transparent;
+  }
+  .sheet__in {
+    display: grid;
+    grid-template-rows: auto 1fr;
+    min-height: 100%;
+    padding-inline: var(--gutter);
+    padding-bottom: max(1.5rem, env(safe-area-inset-bottom));
+  }
+  .sheet__top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: var(--mast);
+  }
+  .sheet__ways {
+    display: grid;
+    align-content: center;
+    padding-block: 2rem;
+  }
+  .sheet__ways a {
+    display: flex;
+    padding-block: 0.5rem;
+    font-weight: 300;
+    font-size: clamp(2.5rem, 11.5vw, 4rem);
+    line-height: 1.06;
+    letter-spacing: -0.03em;
+    overflow-wrap: anywhere;
+    text-decoration: none;
+    transition:
+      opacity 460ms var(--ease-slow),
+      transform 460ms var(--ease-slow);
+  }
+  .sheet__ways a:nth-child(2) {
+    transition-delay: 40ms;
+  }
+  .sheet__ways a:nth-child(3) {
+    transition-delay: 80ms;
+  }
+  .sheet__ways a:nth-child(4) {
+    transition-delay: 120ms;
+  }
+  @starting-style {
+    .sheet[open] .sheet__ways a {
+      opacity: 0;
+      transform: translate3d(0, 1.25rem, 0);
+    }
+  }
+  .sheet__ways a[aria-current='page'] {
+    color: var(--amber-pale);
+  }
+  .sheet__ways a:active {
+    opacity: 0.65;
+  }
+
+  /* ---------- The foot ---------- */
+  .foot {
+    margin-top: var(--air);
+    border-top: 1px solid var(--line);
+  }
+  .foot__in {
+    display: grid;
+    gap: 2.5rem;
+    padding-block: clamp(3rem, 6vw, 5rem) 2rem;
+  }
+  .foot__say {
+    display: grid;
+    gap: 0.75rem;
+    max-width: 30rem;
+  }
+  .foot__say p:not(.wordmark) {
+    font-size: 0.9375rem;
+    line-height: 1.55;
+    color: var(--ink-2);
+  }
+  .foot__ways {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, max-content));
+    align-content: start;
+    gap: 0 clamp(2rem, 5vw, 4.5rem);
+  }
+  .foot__ways a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.75rem;
+    font-size: 0.9375rem;
+    white-space: nowrap;
+    text-decoration: none;
+  }
+  .foot__ways a:active,
+  .foot__out:active {
+    opacity: 0.65;
+  }
+  .foot__end {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.25rem 2rem;
+    font-size: 0.875rem;
+    color: var(--ink-2);
+  }
+  .foot__end .link,
+  .foot__out {
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.75rem;
+  }
+  .foot__out {
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.24em;
+    text-decoration-color: var(--edge);
+    cursor: pointer;
+  }
+  @media (min-width: 56rem) {
+    .foot__in {
+      grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr);
+    }
+    .foot__ways {
+      justify-self: end;
+    }
+    .foot__end {
+      grid-column: 1 / -1;
+    }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sheet,
+  .sheet__ways a,
+  .mast,
+  .mast__ways a > span,
+  .foot__ways a > span {
+    transition: none;
+  }
+}
+
+@media print {
+  .mast,
+  .mast-top,
+  .foot,
+  .skip-link,
+  .toasts {
+    display: none;
+  }
+}
